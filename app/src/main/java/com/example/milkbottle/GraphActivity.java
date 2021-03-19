@@ -23,11 +23,16 @@ public class GraphActivity extends AppCompatActivity {
 
     private LineChart lineChart;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
         lineChart = (LineChart)findViewById(R.id.chart);
+
+        MyMarkerView marker = new MyMarkerView(this,R.layout.markerviewtext);
+        marker.setChartView(lineChart);
+        lineChart.setMarker(marker);
 
         List<Entry> entries = new ArrayList<>();
         entries.add(new Entry(1, 1));
