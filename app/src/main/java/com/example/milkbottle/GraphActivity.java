@@ -35,13 +35,13 @@ public class GraphActivity extends AppCompatActivity {
         lineChart.setMarker(marker);
 
         List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1, 1));
+        entries.add(new Entry((float) 3.22, 1));
         entries.add(new Entry(2, 2));
         entries.add(new Entry(3, 0));
         entries.add(new Entry(4, 4));
         entries.add(new Entry(5, 3));
 
-        LineDataSet lineDataSet = new LineDataSet(entries, "속성명1");
+        LineDataSet lineDataSet = new LineDataSet(entries, "분유량");
         lineDataSet.setLineWidth(2);
         lineDataSet.setCircleRadius(6);
         lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
