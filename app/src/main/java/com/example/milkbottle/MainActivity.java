@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     int befoData, afterData, quantity;
     Date date;
-    String currDate;
+    Date currDate;
     Float currFloat;
 
 
@@ -84,9 +84,7 @@ public class MainActivity extends AppCompatActivity {
         recordBtn.setOnClickListener(v -> {
             befoData= Integer.parseInt(beforeTxt.getText().toString());
             afterData = Integer.parseInt(afterTxt.getText().toString());
-            date = new Date(System.currentTimeMillis());
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:MM:SS");
-            currDate = simpleDateFormat.format(date);
+            currDate = new Date(System.currentTimeMillis());
             currFloat = (float)System.currentTimeMillis();
             quantity = befoData - afterData;
             viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));

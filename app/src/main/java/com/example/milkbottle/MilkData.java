@@ -22,7 +22,7 @@ public class MilkData {
     private int quantity;
 
     @ColumnInfo(name = "currDate")
-    private String currDate;
+    private Date currDate;
 
     @ColumnInfo(name = "currFloat")
     private Float currFloat;
@@ -30,7 +30,7 @@ public class MilkData {
 
 
 
-    public MilkData(int befoData, int afterData, int quantity, String currDate, float currFloat) {
+    public MilkData(int befoData, int afterData, int quantity, Date currDate, float currFloat) {
         this.befoData = befoData;
         this.afterData = afterData;
         this.quantity = quantity;
@@ -69,11 +69,11 @@ public class MilkData {
         this.quantity = quantity;
     }
 
-    public String getCurrDate() {
+    public Date getCurrDate() {
         return currDate;
     }
 
-    public void setCurrDate(String currDate) {
+    public void setCurrDate(Date currDate) {
         this.currDate = currDate;
     }
 

@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -33,7 +34,9 @@ public class GraphActivity extends AppCompatActivity {
 
     private LineChart lineChart;
     static int dataLen =0;
-    private List<Date> dateList;
+    private List<Date> dateList = new ArrayList<>();
+    private List<Float> dateListF = new ArrayList<>();
+    private String[] days = {"mon", "tue", "wed", "thu","fri","sat","sun"};
 
 
 
@@ -56,60 +59,58 @@ public class GraphActivity extends AppCompatActivity {
 
         viewModel.getAll().observe(this, milkData ->{
             dataLen = milkData.size();
-            for(int i=0;i<dataLen;i++) {
-                Date date=null;
-                try {
-                    date = new Date(transFormat.parse(milkData.get(i).getCurrDate()).getTime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-//                dateList.add(date);
-                entries.add(new Entry(milkData.get(i).getCurrFloat(), (float)milkData.get(i).getQuantity()));
+            MilkData milkList;
 
+            for(MilkData milkDate : milkData){
+                long dateTime = milkDate.getCurrDate().getTime();
+                int quantity = milkDate.getQuantity();
+                entries.add(new Entry(dateTime, quantity));
+                dateList.add(milkDate.getCurrDate());
+                dateListF.add(milkDate.getCurrFloat());
             }
+            Log.d("dataSize","entries-"+entries.size());
+
+            LineDataSet lineDataSet = new LineDataSet(entries, "분유량");
+            lineDataSet.setLineWidth(2);
+            lineDataSet.setCircleRadius(6);
+            lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
+            lineDataSet.setCircleColors(Color.BLUE);
+            lineDataSet.setColor(Color.parseColor("#FFA1B4DC"));
+            lineDataSet.setDrawCircleHole(true);
+            lineDataSet.setDrawCircles(true);
+            lineDataSet.setDrawHorizontalHighlightIndicator(false);
+            lineDataSet.setDrawHighlightIndicators(false);
+            lineDataSet.setDrawValues(false);
+
+            LineData lineData = new LineData(lineDataSet);
+            lineChart.setData(lineData);
+
+            //x축 설정
+            XAxis xAxis = lineChart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setTextColor(Color.BLACK);
+            xAxis.enableGridDashedLine(8, 24, 0);
+            xAxis.setValueFormatter(new LineChartXAxisValueFormatter());
+
+            //y축 설정
+            YAxis yLAxis = lineChart.getAxisLeft();
+            yLAxis.setTextColor(Color.BLACK);
+
+            YAxis yRAxis = lineChart.getAxisRight();
+            yRAxis.setDrawLabels(false);
+            yRAxis.setDrawAxisLine(false);
+            yRAxis.setDrawGridLines(false);
+
+            Description description = new Description();
+            description.setText("");
+
+            lineChart.setDoubleTapToZoomEnabled(false);
+            lineChart.setDrawGridBackground(false);
+            lineChart.setDescription(description);
+            lineChart.invalidate();
+
 
         });
-
-        LineDataSet lineDataSet = new LineDataSet(entries, "분유량");
-        lineDataSet.setLineWidth(2);
-        lineDataSet.setCircleRadius(6);
-        lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
-        lineDataSet.setCircleColors(Color.BLUE);
-        lineDataSet.setColor(Color.parseColor("#FFA1B4DC"));
-        lineDataSet.setDrawCircleHole(true);
-        lineDataSet.setDrawCircles(true);
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawHighlightIndicators(false);
-        lineDataSet.setDrawValues(false);
-
-        LineData lineData = new LineData(lineDataSet);
-        lineChart.setData(lineData);
-
-        //x축 설정
-        XAxis xAxis = lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        lineChart.getXAxis().setValueFormatter(new DateValueFormatter(dateList));
-
-        xAxis.setTextColor(Color.BLACK);
-        xAxis.enableGridDashedLine(8, 24, 0);
-
-        //y축 설정
-        YAxis yLAxis = lineChart.getAxisLeft();
-        yLAxis.setTextColor(Color.BLACK);
-
-        YAxis yRAxis = lineChart.getAxisRight();
-        yRAxis.setDrawLabels(false);
-        yRAxis.setDrawAxisLine(false);
-        yRAxis.setDrawGridLines(false);
-
-        Description description = new Description();
-        description.setText("");
-
-        lineChart.setDoubleTapToZoomEnabled(false);
-        lineChart.setDrawGridBackground(false);
-        lineChart.setDescription(description);
-        lineChart.animateY(2000, Easing.EaseInCubic);
-        lineChart.invalidate();
 
     }
 
