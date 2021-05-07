@@ -47,10 +47,6 @@ public class GraphActivity extends AppCompatActivity {
         setContentView(R.layout.activity_graph);
         lineChart = (LineChart)findViewById(R.id.chart);
 
-        MyMarkerView marker = new MyMarkerView(this,R.layout.markerviewtext);
-        marker.setChartView(lineChart);
-        lineChart.setMarker(marker);
-
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         List<Entry> entries = new ArrayList<>();
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
