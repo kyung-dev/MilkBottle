@@ -64,4 +64,7 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
+    //bluetooth
+    compile 'com.akexorcist:bluetoothspp:1.0.0'
+
 }
