@@ -13,13 +13,13 @@ public class MilkData {
     private int id; //데이터베이스에서 primary key
 
     @ColumnInfo(name = "befoData")
-    private int befoData;
+    private Float befoData;
 
     @ColumnInfo(name = "afterdata")
-    private int afterData;
+    private Float afterData;
 
     @ColumnInfo(name = "quantity")
-    private int quantity;
+    private Float quantity;
 
     @ColumnInfo(name = "currDate")
     private Date currDate;
@@ -30,7 +30,7 @@ public class MilkData {
 
 
 
-    public MilkData(int befoData, int afterData, int quantity, Date currDate, float currFloat) {
+    public MilkData(Float befoData, Float afterData, Float quantity, Date currDate, float currFloat) {
         this.befoData = befoData;
         this.afterData = afterData;
         this.quantity = quantity;
@@ -45,27 +45,27 @@ public class MilkData {
         this.id = id;
     }
 
-    public int getBefoData() {
+    public Float getBefoData() {
         return befoData;
     }
 
-    public void setBefoData(int befoData) {
+    public void setBefoData(Float befoData) {
         this.befoData = befoData;
     }
 
-    public int getAfterData() {
+    public Float getAfterData() {
         return afterData;
     }
 
-    public void setAfterData(int afterData) {
+    public void setAfterData(Float afterData) {
         this.afterData = afterData;
     }
 
-    public int getQuantity() {
+    public Float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Float quantity) {
         this.quantity = quantity;
     }
 

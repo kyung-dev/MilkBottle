@@ -59,7 +59,7 @@ public class GraphActivity extends AppCompatActivity {
 
             for(MilkData milkDate : milkData){
                 long dateTime = milkDate.getCurrDate().getTime();
-                int quantity = milkDate.getQuantity();
+                Float quantity = milkDate.getQuantity();
                 entries.add(new Entry(dateTime, quantity));
                 dateList.add(milkDate.getCurrDate());
                 dateListF.add(milkDate.getCurrFloat());

@@ -45,11 +45,12 @@ public class MainActivity extends AppCompatActivity {
     EditText beforeTxt;
     EditText afterTxt;
     TextView test;
+    TextView bluetoothTest;
 
     Button graphBtn;
     Button bluetoothBtn;
 
-    int befoData, afterData, quantity;
+    float befoData, afterData, quantity;
     Date date;
     Date currDate;
     Float currFloat;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         beforeTxt = (EditText) findViewById(R.id.beforData);
         afterTxt = (EditText) findViewById(R.id.afterData);
         test = (TextView) findViewById(R.id.test);
+        bluetoothTest = (TextView) findViewById(R.id.textView);
 
         graphBtn = (Button) findViewById(R.id.graph);
         graphBtn.setOnClickListener(v -> {
@@ -98,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
         //버튼 클릭 시 DB에 insert
         recordBtn.setOnClickListener(v -> {
-            befoData= Integer.parseInt(beforeTxt.getText().toString());
-            afterData = Integer.parseInt(afterTxt.getText().toString());
+            befoData= Float.parseFloat(beforeTxt.getText().toString());
+            afterData = Float.parseFloat(afterTxt.getText().toString());
             currDate = new Date(System.currentTimeMillis());
             currFloat = (float)System.currentTimeMillis();
             quantity = befoData - afterData;
@@ -109,6 +111,15 @@ public class MainActivity extends AppCompatActivity {
         deleteBtn.setOnClickListener(v -> {
             viewModel.deleteAll(new MilkData(befoData, afterData, quantity, currDate, currFloat));
         });
+
+        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() { //데이터 수신
+
+            public void onDataReceived(byte[] data, String message) {
+                bluetoothTest.setText(message);
+
+            }
+        });
+
 
         //먹기 전 분유량 가져오기
         beforeBtn.setOnClickListener(v -> {
@@ -121,12 +132,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("bluetoothTest","beforeData-"+message);
                     beforeTxt.setText(message);
                 }
-
-
             });
             Log.d("bluetoothTest","afterData-3");
-
-
         });
         Log.d("bluetoothTest","afterData-");
 
