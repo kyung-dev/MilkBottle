@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -85,16 +87,15 @@ public class MilkData {
         this.currFloat = currFloat;
     }
 
+    public String getDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
+        return format.format(currDate);
+    }
 
     @Override
     public String toString() {  //내용을 확인 할 수 있도록
-        return "MilkData{" +
-                "id=" + id +
-                ", befoData='" + befoData + '\'' +
-                ", afterData='" + afterData + '\'' +
-                ", quantity='" + quantity + '\'' +
-                ", currDate='" + currDate + '\'' +
-                ", currFloat='" + currFloat + '\'' +
-                '}';
+            return "Date ='" + getDate() + '\n' +
+                    "분유량='" + quantity + '\n'+'\n'
+                    ;
     }
 }

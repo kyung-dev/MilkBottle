@@ -41,6 +41,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/maruburi"
                 android:text="블"
+                android:padding="0dp"
                 app:backgroundTint="#CDDC39" />
 
             <Button
@@ -52,23 +53,11 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/maruburi"
                 android:text="그"
+                android:padding="0dp"
                 app:backgroundTint="#CDDC39" />
 
-            <Button
-                android:id="@+id/dataSend"
-                android:layout_width="16dp"
-                android:layout_height="43dp"
-                android:layout_weight="1"
-                android:text="데이터전송" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -135,64 +124,66 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="290dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+            android:layout_weight="2">
 
             <Button
                 android:id="@+id/recode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="30dp"
+                android:layout_marginBottom="148dp"
                 android:fontFamily="@font/maruburi"
+                android:gravity="center"
                 android:text="기록"
-                app:backgroundTint="#CDDC39" />
+                app:backgroundTint="#CDDC39"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/delete"
-                android:layout_width="123dp"
-                android:layout_height="67dp"
-                android:layout_above="@+id/test"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginStart="84dp"
-                android:layout_marginLeft="84dp"
-                android:layout_marginEnd="26dp"
-                android:layout_marginRight="26dp"
-                android:layout_marginBottom="0dp"
-                android:layout_toEndOf="@+id/recode"
-                android:layout_toRightOf="@+id/recode"
-                android:fontFamily="@font/maruburi"
-                android:text="삭제"
-                app:backgroundTint="#CDDC39" />
+            <!--            <Button-->
+<!--                android:id="@+id/delete"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:layout_marginEnd="26dp"-->
+<!--                android:layout_marginRight="26dp"-->
+<!--                android:layout_marginBottom="0dp"-->
+<!--                android:fontFamily="@font/maruburi"-->
+<!--                android:text="삭제"-->
+<!--                app:backgroundTint="#CDDC39"-->
+<!--            />-->
 
-            <TextView
-                android:id="@+id/test"
-                android:layout_width="318dp"
-                android:layout_height="279dp"
-                android:layout_below="@+id/recode"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginStart="17dp"
-                android:layout_marginLeft="17dp"
-                android:layout_marginTop="19dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="21dp"
-                android:fontFamily="@font/maruburi"
-                android:inputType="textMultiLine"
-                android:scrollbars="vertical"
-/>
+<!--            <TextView-->
+<!--                android:id="@+id/test"-->
+<!--                android:layout_width="318dp"-->
+<!--                android:layout_height="279dp"-->
+<!--                android:layout_below="@+id/recode"-->
+<!--                android:layout_alignParentStart="true"-->
+<!--                android:layout_alignParentLeft="true"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:layout_marginHorizontal="30dp"-->
+<!--                android:layout_marginStart="17dp"-->
+<!--                android:layout_marginLeft="17dp"-->
+<!--                android:layout_marginTop="19dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:layout_marginRight="16dp"-->
+<!--                android:layout_marginBottom="21dp"-->
+<!--                android:fontFamily="@font/maruburi"-->
+<!--                android:inputType="textMultiLine"-->
+<!--                android:scrollbars="vertical"-->
 
 
-        </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

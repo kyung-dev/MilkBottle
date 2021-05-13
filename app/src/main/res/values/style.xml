@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/light_green</item>
+        <item name="colorControlActivated">@color/light_green</item>
+        <item name="colorControlHighlight">@color/light_green</item>
+    </style>
+</resources>

@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
+import java.util.Date;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
@@ -23,6 +24,10 @@ public class MainViewModel extends AndroidViewModel {
 
     public LiveData<List<MilkData>> getAll() {
         return db.milkDao().getAll();
+    }
+
+    public LiveData<List<MilkData>> getDay(Date day1, Date day2){
+        return db.milkDao().getday(day1, day2);
     }
 
     public void insert(MilkData milkData){

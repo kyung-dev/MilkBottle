@@ -24,6 +24,8 @@ public interface MilkDAO {
 //    @Delete
 //    void delete(MilkData milk);
 
+    @Query("SELECT * FROM MilkData WHERE currDate BETWEEN :day1 AND :day2")
+    LiveData<List<MilkData>> getday(Date day1, Date day2);
 
     @Query("DELETE FROM MilkData")
     int deleteAll();
