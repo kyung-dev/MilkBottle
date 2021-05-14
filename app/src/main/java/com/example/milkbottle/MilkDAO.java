@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface MilkDAO {
-    @Query("SELECT * FROM MilkData") // milkData에서 모든 값 불러오는 것
+    @Query("SELECT * FROM MilkData ORDER BY currFloat ASC") // milkData에서 모든 값 불러오는 것
     LiveData<List<MilkData>> getAll();
 
     @Insert
@@ -24,7 +24,7 @@ public interface MilkDAO {
 //    @Delete
 //    void delete(MilkData milk);
 
-    @Query("SELECT * FROM MilkData WHERE currDate BETWEEN :day1 AND :day2")
+    @Query("SELECT * FROM MilkData WHERE currDate BETWEEN :day1 AND :day2 ORDER BY currFloat ASC")
     LiveData<List<MilkData>> getday(Date day1, Date day2);
 
     @Query("DELETE FROM MilkData")

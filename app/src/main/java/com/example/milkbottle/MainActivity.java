@@ -60,11 +60,31 @@ public class MainActivity extends AppCompatActivity {
     public void test(){
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         Calendar cal = Calendar.getInstance();
-        cal.set(2021,4,12,13,49,47);
+        cal.set(2021,1,10,3,49,47);
         Date day = cal.getTime();
 
-        befoData = (float)  0.25;
-        afterData = (float) 0.06;
+        befoData = (float)  0.10;
+        afterData = (float) 0.05;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+
+        cal.set(2021,2,11,8,49,47);
+        day = cal.getTime();
+
+        befoData = (float)  0.15;
+        afterData = (float) 0.04;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+
+        cal.set(2021,3,12,11,49,47);
+        day = cal.getTime();
+
+        befoData = (float)  0.18;
+        afterData = (float) 0.03;
         currDate = day;
         currFloat = (float)day.getTime();
         quantity = befoData - afterData;
@@ -79,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
 
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         bt = new BluetoothSPP(this);
-
 //        test();
         //UI 갱신
-       viewModel.getAll().observe(this, milkData -> {
+//       viewModel.getAll().observe(this, milkData -> {
+//           Log.d("DB","date data "+milkData.toString());
 //            test.setText(milkData.toString());
-        });
-
+//        });
+//        viewModel.deleteAll();
         beforeBtn = (Button) findViewById(R.id.beforVal);
         afterBtn = (Button) findViewById(R.id.afterVal);
         recordBtn = (Button) findViewById(R.id.recode);
@@ -119,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
             currFloat = (float)System.currentTimeMillis();
             quantity = befoData - afterData;
             viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+            Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+
         });
 
 //        deleteBtn.setOnClickListener(v -> {
@@ -136,28 +158,18 @@ public class MainActivity extends AppCompatActivity {
 
         //먹기 전 분유량 가져오기
         beforeBtn.setOnClickListener(v -> {
-            Log.d("bluetoothTest","afterData-1");
-
             bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() { //데이터 수신
                 public void onDataReceived(byte[] data, String message) {
-                    Log.d("bluetoothTest","afterData-2");
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-                    Log.d("bluetoothTest","beforeData-"+message);
                     beforeTxt.setText(message);
                 }
             });
-            Log.d("bluetoothTest","afterData-3");
         });
-        Log.d("bluetoothTest","afterData-");
 
         //먹은 후 분유량 가져오기
         afterBtn.setOnClickListener(v -> {
             bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() { //데이터 수신
                 public void onDataReceived(byte[] data, String message) {
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
                     afterTxt.setText(message);
-                    Log.d("bluetoothTest","afterData-"+message);
-
                 }
             });
         });
@@ -176,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             //데이터 수신되면
             public void onDataReceived(byte[] data, String message) {
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show(); // 토스트로 데이터 띄움
             }
         });
         // 블루투스가 잘 연결이 되었는지 감지하는 리스너

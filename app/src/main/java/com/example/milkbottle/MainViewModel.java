@@ -35,8 +35,8 @@ public class MainViewModel extends AndroidViewModel {
     }
 
 
-    public void deleteAll(MilkData milkData){
-        new DeleteAsyncTask(db.milkDao()).execute(milkData);
+    public void deleteAll(){
+        new DeleteAsyncTask(db.milkDao()).execute();
     }
 
     private static class InsertAsyncTask extends AsyncTask<MilkData, Void, Void> {

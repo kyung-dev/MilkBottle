@@ -30,7 +30,7 @@ public class GraphActivity extends AppCompatActivity {
     private LineChart lineChart;
     static int dataLen = 0;
     Button daliy, weekly, monthly,datePicker;
-    final static long refernce_timestamp =1620660813758L;
+    final static long refernce_timestamp =1609340400823L;
     static Date pickDate = null;
     private DatePickerDialog.OnDateSetListener callbackMethod;
 
@@ -46,11 +46,15 @@ public class GraphActivity extends AppCompatActivity {
         monthly = (Button) findViewById(R.id.monthly);
         datePicker = (Button) findViewById(R.id.datePicker);
 
-
         MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         List<Entry> entries = new ArrayList<>();
         final Calendar cal = Calendar.getInstance();
         final Date[] currDate = {cal.getTime()};
+
+        viewModel.getAll().observe(this, milkData -> {
+            Log.d("DB","date data "+milkData.toString());
+//            test.setText(milkData.toString());
+        });
 
         datePicker.setOnClickListener(v->{
             Calendar calendar = Calendar.getInstance();
@@ -118,6 +122,7 @@ public class GraphActivity extends AppCompatActivity {
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
+
         //x축 설정
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -151,6 +156,7 @@ public class GraphActivity extends AppCompatActivity {
             Float quantity = milkDate.getQuantity();
             entries.add(new Entry(dateTime, quantity));
         }
+        lineChart.getAxisLeft().setLabelCount(entries.size());
         lineChart.getXAxis().setValueFormatter(new HourAxisValueFormatter(refernce_timestamp));
         lineChart.invalidate();
         return entries;
@@ -164,6 +170,7 @@ public class GraphActivity extends AppCompatActivity {
             Float quantity = milkDate.getQuantity();
             entries.add(new Entry(dateTime, quantity));
         }
+        lineChart.getAxisLeft().setLabelCount(entries.size());
         lineChart.getXAxis().setValueFormatter(new DayAxisValueFormatter(refernce_timestamp));
         lineChart.invalidate();
         return entries;
@@ -176,7 +183,8 @@ public class GraphActivity extends AppCompatActivity {
             Float quantity = milkDate.getQuantity();
             entries.add(new Entry(dateTime, quantity));
         }
-        lineChart.getXAxis().setValueFormatter(new DayAxisValueFormatter(refernce_timestamp));
+        lineChart.getAxisLeft().setLabelCount(entries.size());
+        lineChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(refernce_timestamp));
         lineChart.invalidate();
         return entries;
     }
@@ -260,12 +268,14 @@ public class GraphActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
+        cal.set(Calendar.MONTH,0);
         cal.set(Calendar.DATE,1);
         cal.set( Calendar.HOUR_OF_DAY, 0 );
         cal.set( Calendar.MINUTE, 0 );
         cal.set( Calendar.SECOND, 1 );
         monthly.add(0,cal.getTime());
 
+        cal.set(Calendar.MONTH,11);
         cal.set(Calendar.DATE,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         cal.set( Calendar.HOUR_OF_DAY, 23 );
         cal.set( Calendar.MINUTE, 59 );
