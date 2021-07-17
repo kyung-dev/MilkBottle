@@ -6,4 +6,10 @@
         <item name="colorControlActivated">@color/light_green</item>
         <item name="colorControlHighlight">@color/light_green</item>
     </style>
+
+    <style name = "AppTheme" parent = "@style/Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/teal_200</item>
+        <item name="colorPrimaryDark">@color/light_green</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
 </resources>

@@ -22,9 +22,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button menuBtn;
     Button beforeBtn;
     Button afterBtn;
     Button recordBtn; //데이터 삽입버튼
@@ -106,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
 //            test.setText(milkData.toString());
 //        });
 //        viewModel.deleteAll();
+        menuBtn = (Button) findViewById(R.id.menu);
+
         beforeBtn = (Button) findViewById(R.id.beforVal);
         afterBtn = (Button) findViewById(R.id.afterVal);
         recordBtn = (Button) findViewById(R.id.recode);
@@ -114,22 +119,54 @@ public class MainActivity extends AppCompatActivity {
         afterTxt = (EditText) findViewById(R.id.afterData);
 //        test = (TextView) findViewById(R.id.test);
 
-        graphBtn = (Button) findViewById(R.id.graph);
-        graphBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), GraphActivity.class);
-            startActivity(intent);
-        });
-
-        bluetoothBtn = (Button) findViewById(R.id.bluetooth);
-        bluetoothBtn.setOnClickListener(v -> {
-
-
-
-
-                });
+        //TODO
+//        graphBtn = (Button) findViewById(R.id.graph);
+//        graphBtn.setOnClickListener(v -> {
+//            Intent intent = new Intent(getApplicationContext(), GraphActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        bluetoothBtn = (Button) findViewById(R.id.bluetooth);
+//        bluetoothBtn.setOnClickListener(v -> {
+//
+//
+//
+//
+//                });
 
 
 //        test.setMovementMethod(ScrollingMovementMethod.getInstance());
+
+        //메뉴버튼
+        menuBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                final PopupMenu popup = new PopupMenu(getApplicationContext(),v);
+
+                getMenuInflater().inflate(R.menu.option_menu,popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.name1:
+                                Toast.makeText(getApplication(),"블루투스 연결",Toast.LENGTH_SHORT).show();;
+                                break;
+                            case R.id.name2:
+                                Toast.makeText(getApplication(),"그래",Toast.LENGTH_SHORT).show();;
+                                break;
+                            case R.id.name3:
+                                Toast.makeText(getApplication(),"통",Toast.LENGTH_SHORT).show();;
+                                break;
+                        }
+                        return false;
+                    }
+                });
+
+                popup.show();
+            }
+        });
 
         //버튼 클릭 시 DB에 insert
         recordBtn.setOnClickListener(v -> {
