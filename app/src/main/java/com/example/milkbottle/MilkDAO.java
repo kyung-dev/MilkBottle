@@ -25,7 +25,13 @@ public interface MilkDAO {
 //    void delete(MilkData milk);
 
     @Query("SELECT * FROM MilkData WHERE currDate BETWEEN :day1 AND :day2 ORDER BY currFloat ASC")
-    LiveData<List<MilkData>> getday(Date day1, Date day2);
+    LiveData<List<MilkData>> getByday(Date day1, Date day2);
+
+    @Query("SELECT AVG(quantity) FROM MilkData WHERE currDate BETWEEN :day1 AND :day2 ORDER BY currFloat ASC")
+    LiveData<Float> quantityAVG(Date day1, Date day2);
+
+    @Query("SELECT quantity FROM MilkData ORDER BY currDate DESC limit 1")
+    LiveData<Float> lateQuan();
 
     @Query("DELETE FROM MilkData")
     int deleteAll();

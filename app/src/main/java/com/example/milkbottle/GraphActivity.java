@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,37 +29,41 @@ import java.util.List;
 
 public class GraphActivity extends AppCompatActivity {
 
-    private LineChart lineChart;
-    static int dataLen = 0;
-    Button daliy, weekly, monthly,datePicker;
-    final static long refernce_timestamp =1609340400823L;
-    static Date pickDate = null;
-    private DatePickerDialog.OnDateSetListener callbackMethod;
-
+    //변수 선언
+    private LineChart lineChart; //그래프
+    Button daliy, weekly, monthly,dateBtn; // 일, 주, 월, 날짜선택 버튼
+    final static long refernce_timestamp =1609340400823L; // 시간변환 스템프
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+
+        //변수, 컴포넌트 초기화
         lineChart = (LineChart) findViewById(R.id.chart);
         daliy = (Button) findViewById(R.id.daliy);
         weekly = (Button) findViewById(R.id.weekly);
         monthly = (Button) findViewById(R.id.monthly);
-        datePicker = (Button) findViewById(R.id.datePicker);
-
+        dateBtn = (Button) findViewById(R.id.datePicker);
         MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         List<Entry> entries = new ArrayList<>();
         final Calendar cal = Calendar.getInstance();
         final Date[] currDate = {cal.getTime()};
 
-        viewModel.getAll().observe(this, milkData -> {
-            Log.d("DB","date data "+milkData.toString());
-//            test.setText(milkData.toString());
-        });
+        //액션바 제거
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
-        datePicker.setOnClickListener(v->{
-            Calendar calendar = Calendar.getInstance();
+
+        //날짜버튼 해당날짜 세팅
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String today = sdf.format(cal.getTime());
+        dateBtn.setText(today);
+
+        // 날짜선택
+        dateBtn.setOnClickListener(v->{
+
 
                 DatePickerDialog dialog = new DatePickerDialog(GraphActivity.this, R.style.DatePickerTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -65,11 +71,17 @@ public class GraphActivity extends AppCompatActivity {
 
                         String msg = String.format("%d 년 %d 월 %d 일", year, month+1, date);
                         Toast.makeText(GraphActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        calendar.set(Calendar.YEAR,year);
-                        calendar.set(Calendar.MONTH,month);
-                        calendar.set(Calendar.DATE,date);
-                        currDate[0] = calendar.getTime();
-                        viewModel.getDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(GraphActivity.this, milkData -> {
+                        cal.set(Calendar.YEAR,year);
+                        cal.set(Calendar.MONTH,month);
+                        cal.set(Calendar.DATE,date);
+                        currDate[0] = cal.getTime();
+
+                        //날짜버튼 갱신
+                        String select = sdf.format(cal.getTime());
+                        dateBtn.setText(select);
+
+
+                        viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(GraphActivity.this, milkData -> {
                             drawChart(daliyView(milkData));
                         });
                     }
@@ -81,30 +93,35 @@ public class GraphActivity extends AppCompatActivity {
 
             });
 
-        viewModel.getDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, milkData -> {
+
+        // 초기그래프화면 그래프 그리기
+        viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, milkData -> {
             drawChart(daliyView(milkData));
         });
 
+        // 일별 그래프화면
         daliy.setOnClickListener(v -> {
-            Log.d("dateTime","daily  "+currDate[0]);
-            viewModel.getDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, milkData -> {
+            viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, milkData -> {
                 drawChart(daliyView(milkData));
             });
         });
+
+        // 주별 그래프화면
         weekly.setOnClickListener(v -> {
-            Log.d("dateTime","weekly  "+currDate[0]);
-            viewModel.getDay(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, milkData -> {
+            viewModel.getByDay(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, milkData -> {
                 drawChart(weeklyView(milkData));
             });
         });
 
+        // 월펼 그래프화면
         monthly.setOnClickListener(v -> {
-            viewModel.getDay(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, milkData -> {
+            viewModel.getByDay(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, milkData -> {
                 drawChart(monthlyView(milkData));
             });
         });
     }
 
+    // 그래프 그리기
     public void drawChart(List<Entry> entry){
         LineDataSet lineDataSet = new LineDataSet(entry, "분유량");
         lineDataSet.setLineWidth(2);
@@ -118,10 +135,8 @@ public class GraphActivity extends AppCompatActivity {
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setDrawValues(false);
-
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
-
 
         //x축 설정
         XAxis xAxis = lineChart.getXAxis();
@@ -129,11 +144,9 @@ public class GraphActivity extends AppCompatActivity {
         xAxis.setTextColor(Color.BLACK);
         xAxis.enableGridDashedLine(8, 24, 0);
 
-
         //y축 설정
         YAxis yLAxis = lineChart.getAxisLeft();
         yLAxis.setTextColor(Color.BLACK);
-
         YAxis yRAxis = lineChart.getAxisRight();
         yRAxis.setDrawLabels(false);
         yRAxis.setDrawAxisLine(false);
@@ -146,7 +159,6 @@ public class GraphActivity extends AppCompatActivity {
         lineChart.setDrawGridBackground(false);
         lineChart.setDescription(description);
         lineChart.invalidate();
-
     }
 
     public List<Entry> daliyView(List<MilkData> milkData) {
@@ -189,6 +201,7 @@ public class GraphActivity extends AppCompatActivity {
         return entries;
     }
 
+    // 하루 시작, 끝 반환
     public List<Date> dayToday(Date day){
         List<Date> daliy = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -209,6 +222,7 @@ public class GraphActivity extends AppCompatActivity {
         return daliy;
     }
 
+    // 해당 주의 시작, 끝 반환
     public List<Date> dayToWeekly(Date day){
         List<Date> weekly = new ArrayList<>();
         int date;
@@ -263,6 +277,7 @@ public class GraphActivity extends AppCompatActivity {
         return weekly;
     }
 
+    // 해당 월의 시작, 끝 반환
     public List<Date> dayToMonthly(Date date){
         List<Date> monthly = new ArrayList<>();
         Calendar cal = Calendar.getInstance();

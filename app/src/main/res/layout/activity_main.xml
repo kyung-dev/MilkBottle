@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/light_gray"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginVertical="30dp"
-        android:orientation="vertical"
-        >
+        android:layout_marginVertical="10dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_weight="3"
+            android:layout_height="40dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginVertical="30dp"
             android:orientation="horizontal">
 
             <TextView
@@ -27,20 +27,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="left"
-                android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="30dp"
                 android:fontFamily="@font/maruburi"
                 android:text="분유량 기록"
                 android:textSize="30dp" />
+
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
-
             <Button
                 android:id="@+id/menu"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
+                android:gravity="right"
                 android:layout_gravity="right"
                 android:background="@drawable/ic_baseline_menu_24"
                 android:backgroundTint="@color/light_green"
@@ -76,129 +78,165 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="9dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="30dp"
+            android:background="@drawable/layer_line"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/beforVal"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginHorizontal="30dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/maruburi"
-                android:text="먹기 전"
-                app:backgroundTint="#CDDC39" />
+                android:layout_marginVertical="30dp"
+                android:gravity="left"
+                android:text="최근 분유 섭취량 : " />
 
-            <Button
-                android:id="@+id/afterVal"
+            <TextView
+                android:id="@+id/lateQuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginHorizontal="30dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/maruburi"
-                android:text="먹은 후"
-                app:backgroundTint="#CDDC39" />
+                android:layout_marginVertical="30dp"
+                android:text="120cc" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corner"
+            android:layout_marginHorizontal="30dp"
+            android:orientation="vertical">
 
-
-            <EditText
-                android:id="@+id/beforData"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:fontFamily="@font/maruburi"
-                android:inputType="textPersonName"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
 
-                android:hint="먹기 전" />
-            <EditText
-                android:id="@+id/afterData"
+                <Button
+                    android:id="@+id/beforVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="30dp"
+                    android:fontFamily="@font/maruburi"
+                    android:text="먹기 전"
+                    android:textColor="@color/light_green"
+                    android:textSize="15dp"
+                    app:backgroundTint="@color/white"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/light_green"
+                    app:strokeWidth="2dp"/>
+
+                <EditText
+                    android:id="@+id/avgVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="30dp"
+                    android:ems="10"
+                    android:fontFamily="@font/maruburi"
+                    android:gravity="center"
+                    android:hint="먹기 전"
+
+                    android:inputType="textPersonName" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:fontFamily="@font/maruburi"
-                android:inputType="textPersonName"
-                android:hint="먹은 후" />
+                android:layout_marginVertical="30dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/afterVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="30dp"
+                    android:fontFamily="@font/maruburi"
+                    android:text="먹은 후"
+                    android:textColor="@color/light_green"
+                    android:textSize="15dp"
+                    app:backgroundTint="@color/white"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/light_green"
+                    app:strokeWidth="2dp" />
+
+                <EditText
+                    android:id="@+id/afterData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="30dp"
+                    android:ems="10"
+                    android:fontFamily="@font/maruburi"
+                    android:gravity="center"
+                    android:hint="먹은 후"
+                    android:inputType="textPersonName" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/recode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/maruburi"
+                    android:gravity="center"
+                    android:text="기록하기"
+                    android:textColor="@color/white"
+                    app:backgroundTint="#CDDC39" />
+            </LinearLayout>
+
+            <!--            <Button-->
+            <!--                android:id="@+id/delete"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentRight="true"-->
+            <!--                android:layout_marginHorizontal="30dp"-->
+            <!--                android:layout_marginEnd="26dp"-->
+            <!--                android:layout_marginRight="26dp"-->
+            <!--                android:layout_marginBottom="0dp"-->
+            <!--                android:fontFamily="@font/maruburi"-->
+            <!--                android:text="삭제"-->
+            <!--                app:backgroundTint="#CDDC39"-->
+            <!--            />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/test"-->
+            <!--                android:layout_width="318dp"-->
+            <!--                android:layout_height="279dp"-->
+            <!--                android:layout_below="@+id/recode"-->
+            <!--                android:layout_alignParentStart="true"-->
+            <!--                android:layout_alignParentLeft="true"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_alignParentRight="true"-->
+            <!--                android:layout_alignParentBottom="true"-->
+            <!--                android:layout_marginHorizontal="30dp"-->
+            <!--                android:layout_marginStart="17dp"-->
+            <!--                android:layout_marginLeft="17dp"-->
+            <!--                android:layout_marginTop="19dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:layout_marginRight="16dp"-->
+            <!--                android:layout_marginBottom="21dp"-->
+            <!--                android:fontFamily="@font/maruburi"-->
+            <!--                android:inputType="textMultiLine"-->
+            <!--                android:scrollbars="vertical"-->
 
 
         </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="290dp"
-            android:layout_weight="2">
-
-            <Button
-                android:id="@+id/recode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginBottom="148dp"
-                android:fontFamily="@font/maruburi"
-                android:gravity="center"
-                android:text="기록"
-                app:backgroundTint="#CDDC39"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <!--            <Button-->
-<!--                android:id="@+id/delete"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_marginHorizontal="30dp"-->
-<!--                android:layout_marginEnd="26dp"-->
-<!--                android:layout_marginRight="26dp"-->
-<!--                android:layout_marginBottom="0dp"-->
-<!--                android:fontFamily="@font/maruburi"-->
-<!--                android:text="삭제"-->
-<!--                app:backgroundTint="#CDDC39"-->
-<!--            />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/test"-->
-<!--                android:layout_width="318dp"-->
-<!--                android:layout_height="279dp"-->
-<!--                android:layout_below="@+id/recode"-->
-<!--                android:layout_alignParentStart="true"-->
-<!--                android:layout_alignParentLeft="true"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_alignParentBottom="true"-->
-<!--                android:layout_marginHorizontal="30dp"-->
-<!--                android:layout_marginStart="17dp"-->
-<!--                android:layout_marginLeft="17dp"-->
-<!--                android:layout_marginTop="19dp"-->
-<!--                android:layout_marginEnd="16dp"-->
-<!--                android:layout_marginRight="16dp"-->
-<!--                android:layout_marginBottom="21dp"-->
-<!--                android:fontFamily="@font/maruburi"-->
-<!--                android:inputType="textMultiLine"-->
-<!--                android:scrollbars="vertical"-->
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

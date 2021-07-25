@@ -1,27 +1,18 @@
 package com.example.milkbottle;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.room.Room;
-import androidx.room.TypeConverter;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.AsyncQueryHandler;
-import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +21,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -40,26 +31,20 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //컴포넌트언,변수 선언
     Button menuBtn;
     Button beforeBtn;
     Button afterBtn;
     Button recordBtn; //데이터 삽입버튼
-//    Button deleteBtn; //데이터 삭제버튼
-
     EditText beforeTxt;
     EditText afterTxt;
-//    TextView test;
-    TextView bluetoothTest;
-
-    Button graphBtn;
-    Button bluetoothBtn;
-
-    float befoData, afterData, quantity;
-    Date date;
+    TextView lateQuan;
+    BluetoothSPP bt;
+    float befoData, afterData, quantity; //DB저장변수
     Date currDate;
     Float currFloat;
 
-    BluetoothSPP bt;
+    //DB 데이터 저장 테스트
     public void test(){
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         Calendar cal = Calendar.getInstance();
@@ -94,48 +79,35 @@ public class MainActivity extends AppCompatActivity {
         viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
 
     }
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        bt = new BluetoothSPP(this);
-//        test();
-        //UI 갱신
-//       viewModel.getAll().observe(this, milkData -> {
-//           Log.d("DB","date data "+milkData.toString());
-//            test.setText(milkData.toString());
-//        });
-//        viewModel.deleteAll();
-        menuBtn = (Button) findViewById(R.id.menu);
+        // 액션 바 제거
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
+//        test();
+
+        //컴포넌트, 변수 초기화
+        bt = new BluetoothSPP(this);
+        MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        menuBtn = (Button) findViewById(R.id.menu);
         beforeBtn = (Button) findViewById(R.id.beforVal);
         afterBtn = (Button) findViewById(R.id.afterVal);
         recordBtn = (Button) findViewById(R.id.recode);
-//        deleteBtn = (Button) findViewById(R.id.delete);
-        beforeTxt = (EditText) findViewById(R.id.beforData);
+        beforeTxt = (EditText) findViewById(R.id.avgVal);
         afterTxt = (EditText) findViewById(R.id.afterData);
-//        test = (TextView) findViewById(R.id.test);
+        lateQuan = (TextView) findViewById(R.id.lateQuan);
 
-        //TODO
-//        graphBtn = (Button) findViewById(R.id.graph);
-//        graphBtn.setOnClickListener(v -> {
-//            Intent intent = new Intent(getApplicationContext(), GraphActivity.class);
-//            startActivity(intent);
-//        });
-//
-//        bluetoothBtn = (Button) findViewById(R.id.bluetooth);
-//        bluetoothBtn.setOnClickListener(v -> {
-//
-//
-//
-//
-//                });
-
-
-//        test.setMovementMethod(ScrollingMovementMethod.getInstance());
+        //최근분유섭취량 세팅
+        viewModel.lateQuan().observe(this, late->{
+            lateQuan.setText(Float.toString(late)+"cc");
+        });
 
         //메뉴버튼
         menuBtn.setOnClickListener(new View.OnClickListener(){
@@ -150,14 +122,26 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
-                            case R.id.name1:
-                                Toast.makeText(getApplication(),"블루투스 연결",Toast.LENGTH_SHORT).show();;
+                            case R.id.name1: //블루투스
+                                if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) { // 현재 버튼의 상태에 따라 연결이 되어있으면 끊고, 반대면 연결
+                                    bt.disconnect();
+                                } else {
+                                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                                    startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+                                }
                                 break;
-                            case R.id.name2:
-                                Toast.makeText(getApplication(),"그래",Toast.LENGTH_SHORT).show();;
+                            case R.id.name2: //그래프화면 전환
+                                Intent intent = new Intent(getApplicationContext(), GraphActivity.class);
+                                startActivity(intent);
                                 break;
-                            case R.id.name3:
-                                Toast.makeText(getApplication(),"통",Toast.LENGTH_SHORT).show();;
+                            case R.id.name3: // 통계화면 전환
+                                Intent intent2 = new Intent(getApplicationContext(), StatsActivity.class);
+                                //통계화면 날짜버튼 세팅값
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date = new Date();
+                                String time = dateFormat.format(date);
+                                intent2.putExtra("date",time);
+                                startActivity(intent2);
                                 break;
                         }
                         return false;
@@ -184,18 +168,10 @@ public class MainActivity extends AppCompatActivity {
 //            viewModel.deleteAll(new MilkData(befoData, afterData, quantity, currDate, currFloat));
 //        });
 
-        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() { //데이터 수신
-
-            public void onDataReceived(byte[] data, String message) {
-                bluetoothTest.setText(message);
-
-            }
-        });
-
 
         //먹기 전 분유량 가져오기
         beforeBtn.setOnClickListener(v -> {
-            bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() { //데이터 수신
+            bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
                 public void onDataReceived(byte[] data, String message) {
                     beforeTxt.setText(message);
                 }
@@ -204,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
         //먹은 후 분유량 가져오기
         afterBtn.setOnClickListener(v -> {
-            bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() { //데이터 수신
+            bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
                 public void onDataReceived(byte[] data, String message) {
                     afterTxt.setText(message);
                 }
@@ -227,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataReceived(byte[] data, String message) {
             }
         });
+
         // 블루투스가 잘 연결이 되었는지 감지하는 리스너
         bt.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() { //연결됐을 때
             public void onDeviceConnected(String name, String address) {
@@ -243,17 +220,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDeviceConnectionFailed() { //연결실패
                 Toast.makeText(getApplicationContext()
                         , "Unable to connect", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        bluetoothBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) { // 현재 버튼의 상태에 따라 연결이 되어있으면 끊고, 반대면 연결
-                    bt.disconnect();
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                    startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
-                }
             }
         });
     }
@@ -298,4 +264,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

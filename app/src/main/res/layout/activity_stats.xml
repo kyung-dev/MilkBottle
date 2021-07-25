@@ -19,14 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
-            android:layout_marginHorizontal="30dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="통계"
-                android:textSize="20dp"
+                android:text="일일 섭취량 통계"
+                android:textSize="12dp"
                 android:textColor="@color/blue"/>
         </LinearLayout>
 
@@ -34,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="10dp"
 
             android:background="@drawable/round_corner"
             android:gravity="top"
@@ -53,7 +53,9 @@
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/day"
@@ -62,12 +64,8 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="일"
-                        android:textColor="@color/light_green"
-                        android:textSize="20dp"
-                        app:backgroundTint="@color/white"
-                        app:cornerRadius="10dp"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="2dp" />
+                        style="?attr/materialButtonOutlinedStyle"
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/week"
@@ -76,12 +74,8 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="주"
-                        android:textColor="@color/light_green"
-                        android:textSize="20dp"
-                        app:backgroundTint="@color/white"
-                        app:cornerRadius="10dp"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="2dp" />
+                        style="?attr/materialButtonOutlinedStyle"
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/month"
@@ -90,29 +84,28 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="월"
-                        android:textColor="@color/light_green"
-                        android:textSize="20dp"
-                        app:backgroundTint="@color/white"
-                        app:cornerRadius="10dp"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="2dp" />
+                        style="?attr/materialButtonOutlinedStyle"
+                        />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
 
-            <EditText
+            <Button
+                android:id="@+id/dateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="2021.07.13" />
+                android:text="2021.07.13"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/white"
+                android:textSize="12dp" />
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginVertical="30dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -121,22 +114,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
                     android:text="평균 일일 섭취량 : "
-                    android:textSize="30dp" />
+                    android:textSize="18dp" />
 
-                <EditText
-                    android:id="@+id/beforData"
+                <TextView
+                    android:id="@+id/avgVal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="30dp"
-                    android:ems="10"
+                    android:textSize="18dp"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:hint="720cc"
 
                     android:inputType="textPersonName" />
 
@@ -149,13 +140,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="0dp"
-            android:layout_marginHorizontal="30dp">
+            android:layout_marginHorizontal="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="적정 섭취량"
-                android:textSize="20dp"
+                android:text="적정 권장 섭취량"
+                android:textSize="12dp"
                 android:textColor="@color/blue"/>
         </LinearLayout>
 
@@ -163,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="30dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="0dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -183,8 +174,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="634dp"
-            android:layout_marginHorizontal="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="0dp"
             android:background="@drawable/round_corner"
             android:orientation="vertical">
@@ -193,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="20dp"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -209,12 +200,8 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="개월수"
-                        android:textColor="@color/light_green"
-                        android:textSize="20dp"
-                        app:backgroundTint="@color/white"
-                        app:cornerRadius="10dp"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="2dp" />
+                        style="?attr/materialButtonOutlinedStyle"
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/perWeight"
@@ -223,12 +210,8 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="체중"
-                        android:textColor="@color/light_green"
-                        android:textSize="20dp"
-                        app:backgroundTint="@color/white"
-                        app:cornerRadius="10dp"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="2dp" />
+                        style="?attr/materialButtonOutlinedStyle"
+                        />
 
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -238,13 +221,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/weightInput"
+                    android:id="@+id/whatType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -252,22 +235,24 @@
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
                     android:text="몸무게 : "
-                    android:textSize="30dp" />
+                    android:textSize="18dp" />
 
                 <EditText
                     android:id="@+id/weightData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="30dp"
-                    android:ems="7"
+                    android:layout_marginHorizontal="10dp"
+                    android:ems="6"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:hint="3.2kg"
+                    android:hint=""
+                    android:inputType="textPersonName"
 
-                    android:inputType="textPersonName" />
+                    android:textSize="18dp" />
 
                 <Button
+                    android:id="@+id/input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
@@ -280,8 +265,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -294,18 +280,18 @@
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
                     android:text="권장량 : "
-                    android:textSize="30dp" />
+                    android:textSize="18dp" />
 
                 <EditText
                     android:id="@+id/recommendData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="30dp"
-                    android:ems="10"
+                    android:layout_marginHorizontal="10dp"
+                    android:ems="8"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:hint="720cc"
+                    android:hint=""
 
                     android:inputType="textPersonName" />
 
