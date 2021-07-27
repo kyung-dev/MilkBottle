@@ -4,13 +4,14 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 @Entity
-public class MilkData {
+public class MilkData implements Serializable {
     @PrimaryKey(autoGenerate = true) //알아서 primary key 지정
     private int id; //데이터베이스에서 primary key
 

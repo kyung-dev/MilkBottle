@@ -123,5 +123,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="200dp" />
         </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/graphDataBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:backgroundTint="@color/white"
+            android:text="모든 데이터 보기"
+            android:textColor="@color/black" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,10 +22,10 @@ public class MainViewModel extends AndroidViewModel {
             .fallbackToDestructiveMigration()   //DB구조 바꿀때 사용, 기존 데이터 날아감 (기존 데이터 지키려면 migration)
             .build();
     }
-
     public LiveData<List<MilkData>> getAll() {
         return db.milkDao().getAll();
     }
+
 
     public LiveData<List<MilkData>> getByDay(Date day1, Date day2){
         return db.milkDao().getByday(day1, day2);

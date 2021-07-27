@@ -52,6 +52,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:singleSelection="true"
@@ -116,7 +117,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:text="평균 일일 섭취량 : "
+                    android:text="평균 섭취량 : "
                     android:textSize="18dp" />
 
                 <TextView
@@ -191,7 +192,9 @@
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/perMonth"
@@ -237,19 +240,27 @@
                     android:text="몸무게 : "
                     android:textSize="18dp" />
 
-                <EditText
-                    android:id="@+id/weightData"
+                <NumberPicker
+                    android:id="@+id/number_picker"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:ems="6"
-                    android:fontFamily="@font/maruburi"
-                    android:gravity="center"
-                    android:hint=""
-                    android:inputType="textPersonName"
+                    android:layout_marginHorizontal="30dp"/>
 
-                    android:textSize="18dp" />
+
+<!--                <EditText-->
+<!--                    android:id="@+id/weightData"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginHorizontal="10dp"-->
+<!--                    android:ems="6"-->
+<!--                    android:fontFamily="@font/maruburi"-->
+<!--                    android:gravity="center"-->
+<!--                    android:hint=""-->
+<!--                    android:inputType="textPersonName"-->
+
+<!--                    android:textSize="18dp" />-->
 
                 <Button
                     android:id="@+id/input"

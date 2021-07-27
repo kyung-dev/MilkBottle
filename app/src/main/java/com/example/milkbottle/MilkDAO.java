@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public interface MilkDAO {
     @Query("SELECT * FROM MilkData ORDER BY currFloat ASC") // milkData에서 모든 값 불러오는 것
     LiveData<List<MilkData>> getAll();
+
 
     @Insert
     void insert(MilkData milk);
