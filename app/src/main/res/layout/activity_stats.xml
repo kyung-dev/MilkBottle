@@ -15,39 +15,39 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="10dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="일일 섭취량 통계"
-                android:textSize="12dp"
-                android:textColor="@color/blue"/>
+                android:textColor="@color/blue"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
 
             android:background="@drawable/round_corner"
             android:gravity="top"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginTop="30dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -55,38 +55,35 @@
                     android:id="@+id/toggleBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:selectionRequired="true">
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/day"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="일"
-                        style="?attr/materialButtonOutlinedStyle"
-                        />
+                        android:text="일" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/week"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="주"
-                        style="?attr/materialButtonOutlinedStyle"
-                        />
+                        android:text="주" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/month"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="월"
-                        style="?attr/materialButtonOutlinedStyle"
-                        />
+                        android:text="월" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
@@ -96,9 +93,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/white"
                 android:text="2021.07.13"
                 android:textColor="@color/black"
-                android:backgroundTint="@color/white"
                 android:textSize="12dp" />
 
 
@@ -106,9 +103,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginVertical="30dp"
+                android:layout_marginTop="30dp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:background="@color/light_gray">
+
+                <TextView
+                    android:id="@+id/period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:textSize="12dp"></TextView>
 
                 <TextView
                     android:id="@+id/title"
@@ -117,38 +123,63 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:text="평균 섭취량 : "
-                    android:textSize="18dp" />
+                    android:text="평균 섭취량(총 섭취량/총 섭취횟수)"
+                    android:textSize="15dp" />
 
-                <TextView
-                    android:id="@+id/avgVal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="30dp"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/maruburi"
-                    android:gravity="center"
 
-                    android:inputType="textPersonName" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/avgVal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/maruburi"
+                android:gravity="center"
+                android:inputType="textPersonName"
+
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/cycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/maruburi"
+                android:gravity="center"
+                android:text="평균 섭취 주기"
+                android:textSize="15dp"
+                android:background="@color/light_gray"/>
+
+            <TextView
+                android:id="@+id/cycleData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/maruburi"
+                android:gravity="center"
+                android:inputType="textPersonName"
+
+                android:textSize="18dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="0dp"
-            android:layout_marginHorizontal="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="적정 권장 섭취량"
-                android:textSize="12dp"
-                android:textColor="@color/blue"/>
+                android:textColor="@color/blue"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -193,28 +224,26 @@
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:selectionRequired="true">
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/perMonth"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="개월수"
-                        style="?attr/materialButtonOutlinedStyle"
-                        />
+                        android:text="개월수" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/perWeight"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="체중"
-                        style="?attr/materialButtonOutlinedStyle"
-                        />
+                        android:text="체중" />
 
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -245,22 +274,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="30dp"/>
+                    android:layout_marginHorizontal="30dp" />
 
 
-<!--                <EditText-->
-<!--                    android:id="@+id/weightData"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginHorizontal="10dp"-->
-<!--                    android:ems="6"-->
-<!--                    android:fontFamily="@font/maruburi"-->
-<!--                    android:gravity="center"-->
-<!--                    android:hint=""-->
-<!--                    android:inputType="textPersonName"-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/weightData"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:layout_marginHorizontal="10dp"-->
+                <!--                    android:ems="6"-->
+                <!--                    android:fontFamily="@font/maruburi"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:hint=""-->
+                <!--                    android:inputType="textPersonName"-->
 
-<!--                    android:textSize="18dp" />-->
+                <!--                    android:textSize="18dp" />-->
 
                 <Button
                     android:id="@+id/input"
@@ -276,7 +305,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
@@ -287,23 +315,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:text="권장량 : "
-                    android:textSize="18dp" />
+                    android:text="권장량 :"
+                    android:textSize="15dp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/recommendData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="10dp"
-                    android:ems="8"
                     android:fontFamily="@font/maruburi"
                     android:gravity="center"
-                    android:hint=""
-
+                    android:textSize="15dp"
                     android:inputType="textPersonName" />
 
             </LinearLayout>

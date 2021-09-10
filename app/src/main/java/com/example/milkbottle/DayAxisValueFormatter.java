@@ -36,7 +36,7 @@ public class DayAxisValueFormatter extends ValueFormatter {
     private String getHour(long timestamp) {
         try {
             mDate.setTime(timestamp);
-            return mDataFormat.format(mDate);
+            return mDataFormat.format(mDate) +"일";
         } catch (Exception ex) {
             return "xx";
         }

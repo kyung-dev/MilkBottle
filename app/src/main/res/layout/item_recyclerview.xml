@@ -11,14 +11,6 @@
         android:gravity="center_vertical"
         android:padding="20dp">
 
-        <!--프로필 사진-->
-<!--        <ImageView-->
-<!--            android:id="@+id/profile"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:src="@drawable/ic_user"/>-->
-
-        <!--이름-->
         <TextView
             android:id="@+id/quantity"
             android:layout_width="wrap_content"
@@ -28,7 +20,6 @@
             android:textSize="16sp"
             android:textColor="#000"/>
 
-        <!--상태 메시지-->
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
@@ -41,7 +32,6 @@
 
     </LinearLayout>
 
-    <!--구분선-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

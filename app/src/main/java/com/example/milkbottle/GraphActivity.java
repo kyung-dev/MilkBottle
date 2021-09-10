@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,13 +17,25 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,36 +43,54 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class GraphActivity extends AppCompatActivity {
+public class GraphActivity extends AppCompatActivity{
 
     //변수 선언
-    private LineChart lineChart; //그래프
-    Button daliy, weekly, monthly, dateBtn, grahpDataBtn; // 일, 주, 월, 날짜선택 버튼
-    final static long refernce_timestamp =1609340400823L; // 시간변환 스템프
+    private BarChart chart; //그래프
+    Button daily, weekly, monthly, dateBtn, grahpDataBtn; // 일, 주, 월, 날짜선택 버튼
+    MainViewModel viewModel;
+    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+    SimpleDateFormat monthInfoFormat = new SimpleDateFormat("yyyy년 MM월");
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy년");
+    SimpleDateFormat today = new SimpleDateFormat("MMdd");
+    SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
+    SimpleDateFormat infoFormat = new SimpleDateFormat("MM월 dd일");
 
+    TextView infoPeriod,infoData;
+    BarDataSet barDataSet;
+    BarData barData;
+    XAxis xAxis;
+    YAxis yAxis;
+    Date[] currDate;
+
+    ArrayList day = new ArrayList<>();
+    ArrayList week = new ArrayList<>();
+    ArrayList month = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
         //변수, 컴포넌트 초기화
-        lineChart = (LineChart) findViewById(R.id.chart);
-        daliy = (Button) findViewById(R.id.daliy);
+        chart = (BarChart) findViewById(R.id.chart);
+        daily = (Button) findViewById(R.id.daliy);
         weekly = (Button) findViewById(R.id.weekly);
         monthly = (Button) findViewById(R.id.monthly);
         dateBtn = (Button) findViewById(R.id.datePicker);
         grahpDataBtn = (Button) findViewById(R.id.graphDataBtn);
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        List<Entry> entries = new ArrayList<>();
+        infoPeriod = (TextView) findViewById(R.id.infoPeriod);
+        infoData = (TextView) findViewById(R.id.infoData);
         final Calendar cal = Calendar.getInstance();
-        final Date[] currDate = {cal.getTime()};
+        currDate = new Date[]{cal.getTime()};
+
+        entrySetting(cal.getTime());
+
 
         //액션바 제거
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-
 
         //날짜버튼 해당날짜 세팅
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
@@ -86,132 +119,178 @@ public class GraphActivity extends AppCompatActivity {
                         //날짜버튼 갱신
                         String select = sdf.format(cal.getTime());
                         dateBtn.setText(select);
-
-
-                        viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(GraphActivity.this, milkData -> {
-                            drawChart(daliyView(milkData));
-                            Log.d("확인","getByday");
-                        });
+                        entrySetting(cal.getTime());
                     }
-
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                dialog.getDatePicker().setMaxDate(new Date().getTime());    //입력한 날짜 이후로 클릭 안되게 옵션
+            dialog.getDatePicker().setMaxDate(new Date().getTime());    //입력한 날짜 이후로 클릭 안되게 옵션
                 dialog.show();
-
             });
-
 
         // 초기그래프화면 그래프 그리기
-        viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, milkData -> {
-            drawChart(daliyView(milkData));
-        });
+
 
         // 일별 그래프화면
-        daliy.setOnClickListener(v -> {
-            viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, milkData -> {
-                Log.d("데이터크기","일별 : "+milkData.size());
-                drawChart(daliyView(milkData));
-            });
+        daily.setOnClickListener(v -> {
+            drawGraph(day);
+            setInfoData(1);
         });
 
         // 주별 그래프화면
         weekly.setOnClickListener(v -> {
-            viewModel.getByDay(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, milkData -> {
-                Log.d("데이터크기","주별 : "+milkData.size());
-                drawChart(weeklyView(milkData));
-            });
+            drawGraph(week);
+            setInfoData(2);
         });
 
         // 월펼 그래프화면
         monthly.setOnClickListener(v -> {
-            viewModel.getByDay(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, milkData -> {
-                Log.d("데이터크기","월별 : "+milkData.size());
-                drawChart(monthlyView(milkData));
-            });
+            drawGraph(month);
+            setInfoData(3);
         });
     }
 
-    // 그래프 그리기
-    public void drawChart(List<Entry> entry){
-        LineDataSet lineDataSet = new LineDataSet(entry, "분유량");
-        lineDataSet.setLineWidth(2);
-        lineDataSet.setCircleRadius(6);
-        lineDataSet.setColor(Color.parseColor("#CDDC39"));
-        lineDataSet.setCircleColor(Color.parseColor("#CDDC39"));
-        lineDataSet.setCircleColors(Color.parseColor("#CDDC39"));
-        lineDataSet.setCircleHoleColor(Color.parseColor("#FFFFFF"));
-        lineDataSet.setDrawCircleHole(true);
-        lineDataSet.setDrawCircles(true);
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawHighlightIndicators(false);
-        lineDataSet.setDrawValues(false);
-        LineData lineData = new LineData(lineDataSet);
-        lineChart.setData(lineData);
+    public void setInfoData(int select){
+        infoData.setText("");
+        infoPeriod.setText("");
+        final String[] date = {""};
+        //일별
+        if(select==1){
+            viewModel.getByDay(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this,dayList->{
+                if (dayList.size()>=1)
+                    infoPeriod.append(infoFormat.format(dayToWeekly(dayList.get(0).getCurrDate()).get(0))+" ~ "+infoFormat.format(dayToWeekly(dayList.get(0).getCurrDate()).get(1)));
+                for(MilkData milk : dayList){
+                    if(!date[0].equals(today.format(milk.getCurrDate()))){
+                        infoData.append(dayFormat.format(milk.getCurrDate())+"일\n");
+                    }
+                    infoData.append("   "+milk.getQuantity().toString()+"cc ("+time.format(milk.getCurrDate())+")\n\n");
+                    date[0] = today.format(milk.getCurrDate());
 
+                }
+            });
+        }
+        //주별
+        else if(select==2){
+            viewModel.getByDay(weekToMonthly(currDate[0]).get(0),weekToMonthly(currDate[0]).get(1)).observe(this,dayList->{
+                if (dayList.size()>=1)
+                    infoPeriod.append(infoFormat.format(weekToMonthly(dayList.get(0).getCurrDate()).get(0))+" ~ "+infoFormat.format(weekToMonthly(dayList.get(0).getCurrDate()).get(1)));
+                for(MilkData milk : dayList){
+                    if(!date[0].equals(today.format(milk.getCurrDate()))){
+                        infoData.append("\n  "+dayFormat.format(milk.getCurrDate())+"일\n");
+                    }
+                    infoData.append("   "+milk.getQuantity().toString()+"cc ("+time.format(milk.getCurrDate())+")\n");
+                    date[0] = today.format(milk.getCurrDate());
+                }
+            });
 
-        //x축 설정
-        XAxis xAxis = lineChart.getXAxis();
+        }
+        //월별
+        else if(select==3){
+            viewModel.getByDay(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this,dayList->{
+                if (dayList.size()>=1)
+                    infoPeriod.append(infoFormat.format(dayToMonthly(dayList.get(0).getCurrDate()).get(0))+" ~ "+infoFormat.format(dayToMonthly(dayList.get(0).getCurrDate()).get(1)));
+                for(MilkData milk : dayList){
+                    if(!date[0].equals(today.format(milk.getCurrDate()))){
+                        infoData.append("\n  "+infoFormat.format(milk.getCurrDate())+"\n");
+                    }
+                    infoData.append("   "+milk.getQuantity().toString()+"cc ("+time.format(milk.getCurrDate())+")\n");
+                    date[0] = today.format(milk.getCurrDate());
+                }
+            });
+        }
+    }
+
+    //그래프 그리기
+    public void drawGraph(ArrayList entries) {
+        xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(Color.BLACK);
-        xAxis.enableGridDashedLine(8, 24, 0);
+        yAxis = chart.getAxisLeft();
+        yAxis.setAxisMinimum(0);
+        yAxis.setAxisMaximum(600);
+        YAxis yAxisRight = chart.getAxisRight(); //Y축의 오른쪽면 설정
+        yAxisRight.setDrawLabels(false);
+        yAxisRight.setDrawAxisLine(false);
+        yAxisRight.setDrawGridLines(false);
 
-        //y축 설정
-        YAxis yLAxis = lineChart.getAxisLeft();
-        yLAxis.setTextColor(Color.BLACK);
-        YAxis yRAxis = lineChart.getAxisRight();
-        yRAxis.setDrawLabels(false);
-        yRAxis.setDrawAxisLine(false);
-        yRAxis.setDrawGridLines(false);
+
 
         Description description = new Description();
         description.setText("");
 
-        lineChart.setDoubleTapToZoomEnabled(false);
-        lineChart.setDrawGridBackground(false);
-        lineChart.setDescription(description);
-        lineChart.invalidate();
+        barDataSet = new BarDataSet(entries, "일/주/월 별 평균 분유 섭취량 (1회당)");
+        barDataSet.setColor(R.color.light_gray);
+        barData = new BarData(barDataSet);
+        chart.setDescription(description);
+        chart.getXAxis().setLabelCount(entries.size());
+        chart.setData(barData);
+        chart.invalidate();
+
     }
 
-    public List<Entry> daliyView(List<MilkData> milkData) {
-        List<Entry> entries = new ArrayList<>();
-        for (MilkData milkDate : milkData) {
-            long dateTime = milkDate.getCurrDate().getTime()-refernce_timestamp;
-            Float quantity = milkDate.getQuantity();
-            entries.add(new Entry(dateTime, quantity));
+    public void entrySetting(Date date){
+        viewModel = ViewModelProviders.of(GraphActivity.this).get(MainViewModel.class);
+        Calendar cal = Calendar.getInstance();
+        Date day1 = dayToWeekly(date).get(0);
+        day.clear();
+        week.clear();
+        month.clear();
+
+        //일별 entry 데이터 추가
+        for(int i=0;i<7;i++){
+            Date time = day1;
+            cal.setTime(day1);
+            cal.add(Calendar.DATE,1);
+            day1=cal.getTime();
+
+            viewModel.quantityAVG(time,day1).observe(this,avgData->{
+                if(avgData!=null){
+                    day.add(new BarEntry(Integer.parseInt(dayFormat.format(time)), avgData));
+                }
+                else{
+                    day.add(new BarEntry(Integer.parseInt(dayFormat.format(time)),0));
+                }
+            });
         }
-        lineChart.getAxisLeft().setLabelCount(entries.size());
-        lineChart.getXAxis().setValueFormatter(new HourAxisValueFormatter(refernce_timestamp));
-        lineChart.invalidate();
-        return entries;
-    }
 
-    public List<Entry> weeklyView(List<MilkData> milkData) {
-        List<Entry> entries = new ArrayList<>();
+        day1=weekToMonthly(date).get(0);
+        //주별 entry 데이터 추가
+        for(int i=0;i<5;i++){
+            Date time = day1;
+            cal.setTime(day1);
+            cal.add(Calendar.DATE,7);
+            day1=cal.getTime();
+            if(!monthFormat.format(time).equals((monthFormat.format(day1)))) {
+                break;
+            }
 
-        for (MilkData milkDate : milkData) {
-            long dateTime = milkDate.getCurrDate().getTime()-refernce_timestamp;
-            Float quantity = milkDate.getQuantity();
-            entries.add(new Entry(dateTime, quantity));
+            int weekNum = i+1;
+            viewModel.quantityAVG(time,day1).observe(this,avgData->{
+                if(avgData!=null){
+                    week.add(new BarEntry(weekNum, avgData));
+                }
+                else{
+                    week.add(new BarEntry(weekNum,0));
+                }
+            });
         }
-        lineChart.getAxisLeft().setLabelCount(entries.size());
-        lineChart.getXAxis().setValueFormatter(new DayAxisValueFormatter(refernce_timestamp));
-        lineChart.invalidate();
-        return entries;
+
+        day1=dayToMonthly(date).get(0);
+        //월별 entry 데이터 추가
+        for(int i=0;i<12;i++){
+            Date time = day1;
+            cal.setTime(day1);
+            cal.add(Calendar.MONTH,1);
+            day1=cal.getTime();
+
+            viewModel.quantityAVG(time,day1).observe(this,avgData->{
+                if(avgData!=null){
+                    month.add(new BarEntry(Integer.parseInt(monthFormat.format(time)), avgData));
+                }
+                else{
+                    month.add(new BarEntry(Integer.parseInt(monthFormat.format(time)),0));
+                }
+            });
+        }
     }
 
-    public List<Entry> monthlyView(List<MilkData> milkData) {
-        List<Entry> entries = new ArrayList<>();
-        for (MilkData milkDate : milkData) {
-            long dateTime = milkDate.getCurrDate().getTime()-refernce_timestamp;
-            Float quantity = milkDate.getQuantity();
-            entries.add(new Entry(dateTime, quantity));
-        }
-        lineChart.getAxisLeft().setLabelCount(entries.size());
-        lineChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(refernce_timestamp));
-        lineChart.invalidate();
-        return entries;
-    }
 
     // 하루 시작, 끝 반환
     public List<Date> dayToday(Date day){
@@ -287,6 +366,27 @@ public class GraphActivity extends AppCompatActivity {
         weekly.add(1,cal.getTime());
 
         return weekly;
+    }
+
+    //해당 날짜의 1일 반환
+    public List<Date> weekToMonthly(Date date){
+        List<Date> week = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(date);
+        cal.set(Calendar.DATE,1);
+        cal.set( Calendar.HOUR_OF_DAY, 0 );
+        cal.set( Calendar.MINUTE, 0 );
+        cal.set( Calendar.SECOND, 1 );
+        week.add(0,cal.getTime());
+
+        cal.set(Calendar.DATE,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set( Calendar.HOUR_OF_DAY, 23 );
+        cal.set( Calendar.MINUTE, 59 );
+        cal.set( Calendar.SECOND, 59 );
+        week.add(1,cal.getTime());
+
+        return week;
     }
 
     // 해당 월의 시작, 끝 반환

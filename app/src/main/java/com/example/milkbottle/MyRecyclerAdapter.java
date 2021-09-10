@@ -51,7 +51,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         }
 
         void onBind(MilkData item){
-            quantity.setText(Float.toString(item.getQuantity()));
+            quantity.setText(Float.toString(item.getQuantity())+"cc");
             date.setText(item.getDate());
         }
     }

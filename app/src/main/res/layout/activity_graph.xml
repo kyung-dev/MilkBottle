@@ -20,7 +20,6 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="2dp"
             android:layout_marginBottom="10dp"
-            android:text="2021.07.17"
             android:textColor="@color/black"
             app:backgroundTint="@color/light_gray"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,95 +39,113 @@
                 android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
-                app:selectionRequired="true">
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/daliy"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginHorizontal="2dp"
                     android:fontFamily="@font/maruburi"
-                    android:text="일"
-                    style="?attr/materialButtonOutlinedStyle"
-                    />
-<!--                    app:rippleColor="@color/light_green"-->
-<!--                    android:textColor="@color/light_green"-->
-<!--                    android:textSize="20dp"-->
-
-<!--                    app:backgroundTint="@color/white"-->
-<!--                    app:cornerRadius="10dp"-->
-<!--                    app:strokeColor="@color/light_green"-->
-<!--                    app:strokeWidth="2dp"-->
-<!--                     style="?attr/materialButtonOutlinedStyle"/>-->
+                    android:text="일" />
 
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/weekly"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginHorizontal="2dp"
                     android:fontFamily="@font/maruburi"
-                    android:text="주"
-                    style="?attr/materialButtonOutlinedStyle"
-                    />
-<!--                    app:rippleColor="@color/light_green"-->
-<!--                    style="?attr/materialButtonOutlinedStyle"-->
-<!--                    android:textColor="@color/light_green"-->
-<!--                    android:textSize="20dp"-->
-<!--                    app:backgroundTint="@color/white"-->
-<!--                    app:cornerRadius="10dp"-->
-<!--                    app:strokeColor="@color/light_green"-->
-<!--                    app:strokeWidth="2dp" />-->
+                    android:text="주" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/monthly"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginHorizontal="2dp"
                     android:fontFamily="@font/maruburi"
-                    android:text="월"
-                    style="?attr/materialButtonOutlinedStyle"
-                    />
-<!--                    app:rippleColor="@color/light_green"-->
-<!--                    style="?attr/materialButtonOutlinedStyle"-->
-<!--                    android:textColor="@color/light_green"-->
-<!--                    android:textSize="20dp"-->
-<!--                    app:backgroundTint="@color/white"-->
-<!--                    app:cornerRadius="10dp"-->
-<!--                    app:strokeColor="@color/light_green"-->
-<!--                    app:strokeWidth="2dp" />-->
+                    android:text="월" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
         </LinearLayout>
 
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="30dp"
-            android:background="@drawable/round_corner"
-            android:fillViewport="true"
-            android:foregroundGravity="top"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            android:layout_marginTop="30dp"
+            >
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp" />
-        </HorizontalScrollView>
+            <HorizontalScrollView
+                android:id="@+id/period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_corner"
+                android:fillViewport="true"
+                android:foregroundGravity="top"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:layout_marginVertical="5dp">
+
+                </com.github.mikephil.charting.charts.BarChart>
+
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/round_corner"
+
+                >
+                <TextView
+                    android:id="@+id/infoPeriod"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/maruburi"
+                    android:gravity="center_horizontal"
+                    android:layout_marginVertical="15dp"
+                    >
+                </TextView>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+
+                >
+                <TextView
+                    android:id="@+id/infoData"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="15dp"
+                    android:fontFamily="@font/maruburi">
+                </TextView>
+
+            </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/graphDataBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="30dp"
             android:backgroundTint="@color/white"
             android:text="모든 데이터 보기"
             android:textColor="@color/black" />

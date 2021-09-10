@@ -36,7 +36,7 @@ public class MonthAxisValueFormatter extends ValueFormatter {
     private String getHour(long timestamp) {
         try {
             mDate.setTime(timestamp);
-            return mDataFormat.format(mDate);
+            return mDataFormat.format(mDate)+"월";
         } catch (Exception ex) {
             return "xx";
         }

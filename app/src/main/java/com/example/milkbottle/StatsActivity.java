@@ -19,16 +19,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatsActivity extends AppCompatActivity {
 
+    MainViewModel viewModel;
+    final Calendar cal = Calendar.getInstance();
+    final Date[] currDate = {cal.getTime()};
+    SimpleDateFormat cycleFormat = new SimpleDateFormat("HH시간 mm분");
     Button dateBtn;
     Button dailyBtn, weeklyBtn, monthlyBtn;
     Button perMonthBtn;
     Button perWeightBtn;
     Button inputBtn;
+    TextView period;
     TextView avgVal;
+    TextView cycleData;
     TextView whatType;
     TextView recommandData;
     NumberPicker numberPicker;
@@ -39,8 +44,8 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
 
         //초기화
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         LiveData<List<MilkData>> milkData;
+        viewModel = ViewModelProviders.of(StatsActivity.this).get(MainViewModel.class);
         dateBtn = (Button) findViewById(R.id.dateBtn);
         perMonthBtn = (Button) findViewById(R.id.perMonth);
         perWeightBtn = (Button) findViewById(R.id.perWeight);
@@ -48,12 +53,13 @@ public class StatsActivity extends AppCompatActivity {
         weeklyBtn = (Button) findViewById(R.id.week);
         monthlyBtn = (Button) findViewById(R.id.month);
         inputBtn = (Button) findViewById(R.id.input);
+        period = (TextView) findViewById(R.id.period);
         avgVal = (TextView) findViewById(R.id.avgVal);
+        cycleData = (TextView) findViewById(R.id.cycleData);
         whatType = (TextView) findViewById(R.id.whatType);
         recommandData = (TextView) findViewById(R.id.recommendData);
         numberPicker = (NumberPicker) findViewById(R.id.number_picker);
-        final Calendar cal = Calendar.getInstance();
-        final Date[] currDate = {cal.getTime()};
+
         String[] monthData = new String[]{"0~1개월","1~2개월", "2~3개월","3~4개월","4~5개월","5~8개월","9~10개월"};
         String[] weightData = new String[]{"~3.6kg","~4kg", "~4.5kg","~5kg","~5.5kg","~6.3kg"};
 
@@ -66,6 +72,9 @@ public class StatsActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
         String today = sdf.format(cal.getTime());
         dateBtn.setText(today);
+
+        //기간 세팅
+        period.setText(today);
 
         //날짜버튼 datePicker
         dateBtn.setOnClickListener(v->{
@@ -95,31 +104,83 @@ public class StatsActivity extends AppCompatActivity {
 
         //일 평균 섭취량
         dailyBtn.setOnClickListener(v->{
+            setCycle(1);
+            period.setText(sdf.format(currDate[0]));
             viewModel.quantityAVG(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, avg -> {
-                if(avg!=null)
-                    avgVal.setText(Float.toString(avg) + "cc");
+                if(avg!=null) {
+                    avgVal.setText(String.format("%.1f",avg) + "cc ");
+                }
                 else
                     avgVal.setText("0cc");
             });
+
+            viewModel.quantitySUM(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, sum ->{
+                if(sum!=null) {
+                    avgVal.append("( "+String.format("%.1f",sum)+"cc/");
+
+                }
+                else
+                    avgVal.append("(0/");
+            });
+            viewModel.quantityCOUNT(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, count->{
+                int quantity=0;
+                if(count!=null)
+                    quantity = Math.round(count);
+                avgVal.append(Integer.toString(quantity)+"회)");
+            });
+
         });
 
         //주 평균섭취량
         weeklyBtn.setOnClickListener(v->{
+            setCycle(2);
+            period.setText(sdf.format(dayToWeekly(currDate[0]).get(0))+" ~ "+sdf.format(dayToWeekly(currDate[0]).get(1)));
             viewModel.quantityAVG(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, avg -> {
-                if(avg!=null)
-                    avgVal.setText(Float.toString(avg) + "cc");
+                if(avg!=null) {
+                    avgVal.setText(String.format("%.1f",avg) + "cc ");
+                }
                 else
                     avgVal.setText("0cc");
             });
+
+            viewModel.quantitySUM(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, sum ->{
+                if(sum!=null) {
+                    avgVal.append("( "+String.format("%.1f",sum)+"cc/");
+                }else
+                    avgVal.append("(0/");
+            });
+            viewModel.quantityCOUNT(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, count->{
+                int quantity=0;
+                if(count!=null)
+                    quantity = Math.round(count);
+                avgVal.append(Integer.toString(quantity)+"회)");
+            });
+
         });
 
         //월 평균 섭취량
         monthlyBtn.setOnClickListener(v->{
+            setCycle(3);
+            period.setText(sdf.format(dayToMonthly(currDate[0]).get(0))+" ~ "+sdf.format(dayToMonthly(currDate[0]).get(1)));
             viewModel.quantityAVG(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, avg -> {
-                if(avg!=null)
-                    avgVal.setText(Float.toString(avg) + "cc");
+                if(avg!=null) {
+                    avgVal.setText(String.format("%.1f",avg) + "cc ");
+                }
                 else
                     avgVal.setText("0cc");
+            });
+
+            viewModel.quantitySUM(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, sum ->{
+                if(sum!=null) {
+                    avgVal.append("( "+String.format("%.1f",sum)+"cc/");
+                }else
+                    avgVal.append("(0/");
+            });
+            viewModel.quantityCOUNT(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, count->{
+                int quantity=0;
+                if(count!=null)
+                    quantity = Math.round(count);
+                avgVal.append(Integer.toString(quantity)+"회)");
             });
         });
 
@@ -150,6 +211,76 @@ public class StatsActivity extends AppCompatActivity {
                 recommandData.setText(recommend(weightData[numberPicker.getValue()]));
             }
         });
+    }
+
+    public void setCycle(int select){
+        Date day1 = currDate[0];
+        Date day2 =  null;
+        Calendar cal = Calendar.getInstance();
+        //일별 주기
+        cycleData.setText("");
+        if(select==1) {
+            viewModel.getByDay(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this,milkList->{
+                long date1=0;
+                long date2=0;
+                long sum=0;
+                if(milkList.size()>=2) {
+                    date1 = milkList.get(0).getCurrDate().getTime();
+                    for (MilkData milk : milkList) {
+                        date2 = milk.getCurrDate().getTime();
+                        sum += (date2 - date1);
+                        date1 = date2;
+                    }
+                    Date temp =new Date(sum / (milkList.size()-1));
+                    cal.setTime(temp);
+                    cal.add(Calendar.DATE,-1);
+                    cal.add(Calendar.HOUR,-9);
+                    cycleData.append(cycleFormat.format(cal.getTime()));
+                }
+            });
+        }
+        //주별 주기
+        else if(select==2) {
+            viewModel.getByDay(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this,milkList->{
+                long date1=0;
+                long date2=0;
+                long sum=0;
+                if(milkList.size()>=2) {
+                    date1 = milkList.get(0).getCurrDate().getTime();
+                    for (MilkData milk : milkList) {
+                        date2 = milk.getCurrDate().getTime();
+                        sum += (date2 - date1);
+                        date1 = date2;
+                    }
+                    Date temp =new Date(sum / (milkList.size()-1));
+                    cal.setTime(temp);
+                    cal.add(Calendar.DATE,-1);
+                    cal.add(Calendar.HOUR,-9);
+                    cycleData.append(cycleFormat.format(cal.getTime()));
+                }
+            });
+        }
+        //월별 주기
+        else if(select==3) {
+            viewModel.getByDay(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this,milkList->{
+                long date1=0;
+                long date2=0;
+                long sum=0;
+                if(milkList.size()>=2) {
+                    date1 = milkList.get(0).getCurrDate().getTime();
+                    for (MilkData milk : milkList) {
+                        date2 = milk.getCurrDate().getTime();
+                        sum += (date2 - date1);
+                        date1 = date2;
+                    }
+                    Date temp =new Date(sum / (milkList.size()-1));
+                    cal.setTime(temp);
+                    cal.add(Calendar.DATE,-1);
+                    cal.add(Calendar.HOUR,-9);
+                    cycleData.append(cycleFormat.format(cal.getTime()));
+                }
+            });
+        }
     }
     // 하루 시작, 끝 반환
     public List<Date> dayToday(Date day){
@@ -252,33 +383,33 @@ public class StatsActivity extends AppCompatActivity {
     private String recommend(String input){
         switch (input){
             case "0~1개월":
-                return "60~90cc";
+                return "60~90cc (하루 7~8회, 900cc이하)";
             case "1~2개월":
-                return "120~160cc";
+                return "120~160cc (하루 5~6회, 900cc이하)";
             case "2~3개월":
-                return "120~160cc";
+                return "120~160cc (하루 5~6회, 900cc이하)";
             case "3~4개월":
-                return "160~200cc";
+                return "160~200cc (하루 5회, 900cc이하)";
             case "4~5개월":
-                return "180~200cc";
+                return "180~200cc (하루 5회, 900cc이하)";
             case "5~8개월":
-                return "200~240cc";
+                return "200~240cc (하루 4~5회, 1000cc이하)";
             case "9~10개월":
-                return "180~210cc";
+                return "180~210cc (하루 4회, 1000cc이하)";
 
 
             case "~3.6kg":
-                return "~60cc";
+                return "~60cc (하루 500~600cc)";
             case "~4kg":
-                return "~90cc";
+                return "~90cc (하루 720cc)";
             case "~4.5kg":
-                return "~120cc";
+                return "~120cc (하루 720~800cc)";
             case "~5kg":
-                return "~150cc";
+                return "~150cc (하루 850cc)";
             case "~5.5kg":
-                return "~180cc";
+                return "~180cc (하루 960cc)";
             case "~6.3kg":
-                return "200cc";
+                return "200cc (하루 1100cc)";
         }
         return null;
     }

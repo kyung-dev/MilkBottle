@@ -32,8 +32,14 @@ public interface MilkDAO {
     @Query("SELECT AVG(quantity) FROM MilkData WHERE currDate BETWEEN :day1 AND :day2 ORDER BY currFloat ASC")
     LiveData<Float> quantityAVG(Date day1, Date day2);
 
-    @Query("SELECT quantity FROM MilkData ORDER BY currDate DESC limit 1")
-    LiveData<Float> lateQuan();
+    @Query("SELECT SUM(quantity) FROM MilkData WHERE currDate BETWEEN :day1 AND :day2 ORDER BY currFloat ASC")
+    LiveData<Float> quantitySUM(Date day1, Date day2);
+
+    @Query("SELECT COUNT(quantity) FROM MilkData WHERE currDate BETWEEN :day1 AND :day2 ORDER BY currFloat ASC")
+    LiveData<Float> quantityCOUNT(Date day1, Date day2);
+
+    @Query("SELECT * FROM MilkData ORDER BY currDate DESC limit 1")
+    LiveData<MilkData> lateData();
 
     @Query("DELETE FROM MilkData")
     int deleteAll();

@@ -11,6 +11,7 @@ import android.content.Intent;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 //        test();
 
         //컴포넌트, 변수 초기화
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH시간 mm분");
         bt = new BluetoothSPP(this);
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         menuBtn = (Button) findViewById(R.id.menu);
@@ -105,8 +107,26 @@ public class MainActivity extends AppCompatActivity {
         lateQuan = (TextView) findViewById(R.id.lateQuan);
 
         //최근분유섭취량 세팅
-        viewModel.lateQuan().observe(this, late->{
-            lateQuan.setText(Float.toString(late)+"cc");
+        viewModel.lateData().observe(this, late->{
+            Calendar cal = Calendar.getInstance();
+            Date day1 = cal.getTime();
+            Date day2 = late.getCurrDate();
+            Log.d("test","late time : "+day1.toString());
+            Log.d("test","late time : "+day2.toString());
+            Date temp = null;
+            long date1=0;
+            long date2=0;
+
+            date1 = day1.getTime();
+            date2 = day2.getTime();
+            temp = new Date(date1-date2);
+            Log.d("test","late time : "+temp.toString());
+
+            cal.setTime(temp);
+            cal.add(Calendar.DATE,-1);
+            cal.add(Calendar.HOUR,-9);
+
+            lateQuan.setText(dateFormat.format(cal.getTime())+"전 "+Float.toString(late.getQuantity())+"cc");
         });
 
         //메뉴버튼

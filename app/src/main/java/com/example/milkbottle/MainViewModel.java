@@ -35,8 +35,16 @@ public class MainViewModel extends AndroidViewModel {
         return db.milkDao().quantityAVG(day1, day2);
     }
 
-    public LiveData<Float> lateQuan(){
-        return db.milkDao().lateQuan();
+    public LiveData<Float> quantitySUM(Date day1, Date day2){
+        return db.milkDao().quantitySUM(day1, day2);
+    }
+
+    public LiveData<Float> quantityCOUNT(Date day1, Date day2){
+        return db.milkDao().quantityCOUNT(day1, day2);
+    }
+
+    public LiveData<MilkData> lateData(){
+        return db.milkDao().lateData();
     }
 
     public void insert(MilkData milkData){
