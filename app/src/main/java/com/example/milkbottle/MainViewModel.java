@@ -47,6 +47,10 @@ public class MainViewModel extends AndroidViewModel {
         return db.milkDao().lateData();
     }
 
+    public LiveData<List<MilkData>> latedata(){
+        return db.milkDao().latedata();
+    }
+
     public void insert(MilkData milkData){
         new InsertAsyncTask(db.milkDao()).execute(milkData);
     }

@@ -3,9 +3,13 @@ package com.example.milkbottle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 
@@ -22,9 +26,11 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -44,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
     float befoData, afterData, quantity; //DB저장변수
     Date currDate;
     Float currFloat;
+    long lateMilk;
+
+    //알람관련 변수
+    private AlarmManager alarmManager;
+    private GregorianCalendar mCalender;
+
+    private NotificationManager notificationManager;
+    NotificationCompat.Builder builder;
+
 
     //DB 데이터 저장 테스트
     public void test(){
@@ -95,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 //        test();
 
         //컴포넌트, 변수 초기화
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH시간 mm분");
         bt = new BluetoothSPP(this);
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         menuBtn = (Button) findViewById(R.id.menu);
@@ -105,29 +119,16 @@ public class MainActivity extends AppCompatActivity {
         beforeTxt = (EditText) findViewById(R.id.avgVal);
         afterTxt = (EditText) findViewById(R.id.afterData);
         lateQuan = (TextView) findViewById(R.id.lateQuan);
+        lateMilk=0;
 
-        //최근분유섭취량 세팅
-        viewModel.lateData().observe(this, late->{
-            Calendar cal = Calendar.getInstance();
-            Date day1 = cal.getTime();
-            Date day2 = late.getCurrDate();
-            Log.d("test","late time : "+day1.toString());
-            Log.d("test","late time : "+day2.toString());
-            Date temp = null;
-            long date1=0;
-            long date2=0;
+        //알림 관련 변수 초기화
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        alarmManager = (AlarmManager)getSystemService(getApplicationContext().ALARM_SERVICE);
+        mCalender = new GregorianCalendar();
+        Log.d("0912", mCalender.getTime().toString());
 
-            date1 = day1.getTime();
-            date2 = day2.getTime();
-            temp = new Date(date1-date2);
-            Log.d("test","late time : "+temp.toString());
-
-            cal.setTime(temp);
-            cal.add(Calendar.DATE,-1);
-            cal.add(Calendar.HOUR,-9);
-
-            lateQuan.setText(dateFormat.format(cal.getTime())+"전 "+Float.toString(late.getQuantity())+"cc");
-        });
+        //최근 분유 데이터 세팅
+        setLateQuan(viewModel);
 
         //메뉴버튼
         menuBtn.setOnClickListener(new View.OnClickListener(){
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //버튼 클릭 시 DB에 insert
+        //기록 버튼 클릭 시 DB에 insert
         recordBtn.setOnClickListener(v -> {
             befoData= Float.parseFloat(beforeTxt.getText().toString());
             afterData = Float.parseFloat(afterTxt.getText().toString());
@@ -181,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             quantity = befoData - afterData;
             viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
             Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+            setLateQuan(viewModel);
 
         });
 
@@ -242,6 +244,67 @@ public class MainActivity extends AppCompatActivity {
                         , "Unable to connect", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    public void setLateQuan(MainViewModel viewModel){
+        //최근분유섭취량 세팅
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd일 HH시간 mm분");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH시간 mm분");
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+        SimpleDateFormat minFormat = new SimpleDateFormat("mm");
+        SimpleDateFormat secFormat = new SimpleDateFormat("ss");
+
+        viewModel.latedata().observe(this, late->{
+            Calendar cal = Calendar.getInstance();
+            Calendar predict = Calendar.getInstance(); // 다음 분유 알림 시간
+
+            Date day1 = cal.getTime(); //현재 시간
+            Date day2 = late.get(0).getCurrDate(); //최근 분유 섭취시간
+            Date day3 = late.get(1).getCurrDate(); //최근 직전 분유 섭취시간
+            Date lateQuanSet = null;
+            Date alarmSet = null;
+            long date1=0;
+            long date2=0;
+            long date3=0;
+            lateMilk=day2.getTime();
+
+            date1 = day1.getTime();
+            date2 = day2.getTime();
+            date3 = day3.getTime();
+            lateQuanSet = new Date(date1-date2);
+            alarmSet = new Date(date3-date2);
+
+            predict.setTime(alarmSet);
+            predict.add(Calendar.DATE,Integer.parseInt(dayFormat.format(cal.getTime())));
+            predict.add(Calendar.HOUR,Integer.parseInt(hourFormat.format(cal.getTime())));
+            predict.add(Calendar.MINUTE,Integer.parseInt(minFormat.format(cal.getTime())));
+            predict.add(Calendar.SECOND,Integer.parseInt(secFormat.format(cal.getTime())));
+
+            cal.setTime(lateQuanSet);
+//            cal.add(Calendar.DATE,1);
+            cal.add(Calendar.HOUR,-9);
+
+            //알림 시간 세팅
+            setAlarm(predict);
+
+            //최근분유시간 세팅
+            if(day2.getDay()==day1.getDay())
+                lateQuan.setText(dateFormat2.format(cal.getTime())+"전 "+Float.toString(late.get(0).getQuantity())+"cc");
+            else
+                lateQuan.setText(dateFormat.format(cal.getTime())+"전 "+Float.toString(late.get(0).getQuantity())+"cc");
+        });
+    }
+
+    public void setAlarm(Calendar predictTime){
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(MainActivity.this, AlarmRecevier.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, receiverIntent, 0);
+//        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.SECOND,10);
+        alarmManager.set(AlarmManager.RTC, predictTime.getTimeInMillis(), pendingIntent);
+
     }
     // 앱 중단시 (액티비티 나가거나, 특정 사유로 중단시)
     public void onDestroy() {
