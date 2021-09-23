@@ -44,6 +44,9 @@ public interface MilkDAO {
     @Query("SELECT * FROM MilkData ORDER BY currDate DESC limit 2")
     LiveData<List<MilkData>> latedata();
 
+    @Query("SELECT count(*) FROM MilkData")
+    int count();
+
     @Query("DELETE FROM MilkData")
     int deleteAll();
 

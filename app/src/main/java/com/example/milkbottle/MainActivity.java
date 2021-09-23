@@ -63,37 +63,174 @@ public class MainActivity extends AppCompatActivity {
     //DB 데이터 저장 테스트
     public void test(){
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
         Calendar cal = Calendar.getInstance();
-        cal.set(2021,1,10,3,49,47);
+        cal.set(2021,7,21,3,49,47);
         Date day = cal.getTime();
 
-        befoData = (float)  0.10;
-        afterData = (float) 0.05;
+        befoData = (float)  200;
+        afterData = (float) 45;
         currDate = day;
         currFloat = (float)day.getTime();
         quantity = befoData - afterData;
         viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
 
-        cal.set(2021,2,11,8,49,47);
+        cal.set(2021,8,11,6,25,5);
         day = cal.getTime();
 
-        befoData = (float)  0.15;
-        afterData = (float) 0.04;
+        befoData = (float)  200;
+        afterData = (float) 30;
         currDate = day;
         currFloat = (float)day.getTime();
         quantity = befoData - afterData;
         viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
 
-        cal.set(2021,3,12,11,49,47);
+        cal.set(2021,8,11,12,11,27);
         day = cal.getTime();
 
-        befoData = (float)  0.18;
-        afterData = (float) 0.03;
+        befoData = (float)  200;
+        afterData = (float) 32;
         currDate = day;
         currFloat = (float)day.getTime();
         quantity = befoData - afterData;
         viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,11,12,11,27);
+        day = cal.getTime();
 
+        befoData = (float)  210;
+        afterData = (float) 22;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,11,16,2,7);
+        day = cal.getTime();
+
+        befoData = (float)  210;
+        afterData = (float) 32;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,11,20,41,46);
+        day = cal.getTime();
+
+        befoData = (float)  210;
+        afterData = (float) 17;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,12,1,9,33);
+        day = cal.getTime();
+
+        befoData = (float)  210;
+        afterData = (float) 30;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,13,6,11,27);
+        day = cal.getTime();
+
+        befoData = (float)  220;
+        afterData = (float) 10;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,13,10,55,20);
+        day = cal.getTime();
+
+        befoData = (float)  220;
+        afterData = (float) 12;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,13,15,11,27);
+        day = cal.getTime();
+
+        befoData = (float)  230;
+        afterData = (float) 5;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,13,21,1,6);
+        day = cal.getTime();
+
+        befoData = (float)  230;
+        afterData = (float) 32;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,14,2,51,57);
+        day = cal.getTime();
+
+        befoData = (float)  230;
+        afterData = (float) 27;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,14,8,18,44);
+        day = cal.getTime();
+
+        befoData = (float)  230;
+        afterData = (float) 32;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,14,14,37,49);
+        day = cal.getTime();
+
+        befoData = (float)  230;
+        afterData = (float) 22;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,14,19,11,27);
+        day = cal.getTime();
+
+        befoData = (float)  230;
+        afterData = (float) 25;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,14,23,21,43);
+        day = cal.getTime();
+
+        befoData = (float)  240;
+        afterData = (float) 21;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,15,6,24,7);
+        day = cal.getTime();
+
+        befoData = (float)  240;
+        afterData = (float) 32;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,15,10,1,50);
+        day = cal.getTime();
+
+        befoData = (float)  240;
+        afterData = (float) 19;
+        currDate = day;
+        currFloat = (float)day.getTime();
+        quantity = befoData - afterData;
+        viewModel.insert(new MilkData(befoData, afterData, quantity, currDate, currFloat));
+        cal.set(2021,8,15,16,55,27);
+        day = cal.getTime();
     }
 
 
@@ -107,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-//        test();
+
 
         //컴포넌트, 변수 초기화
         bt = new BluetoothSPP(this);
@@ -120,6 +257,8 @@ public class MainActivity extends AppCompatActivity {
         afterTxt = (EditText) findViewById(R.id.afterData);
         lateQuan = (TextView) findViewById(R.id.lateQuan);
         lateMilk=0;
+
+        test();
 
         //알림 관련 변수 초기화
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);

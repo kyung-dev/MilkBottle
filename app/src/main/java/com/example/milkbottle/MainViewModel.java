@@ -55,6 +55,8 @@ public class MainViewModel extends AndroidViewModel {
         new InsertAsyncTask(db.milkDao()).execute(milkData);
     }
 
+    public int count(){return db.milkDao().count();}
+
 
     public void deleteAll(){
         new DeleteAsyncTask(db.milkDao()).execute();
