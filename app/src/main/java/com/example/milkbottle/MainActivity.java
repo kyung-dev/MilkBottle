@@ -65,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
         MainViewModel  viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         Calendar cal = Calendar.getInstance();
-        cal.set(2021,7,21,3,49,47);
+
+        cal.set(2021,7,21,3,49,47); //날짜 세팅
         Date day = cal.getTime();
 
-        befoData = (float)  200;
-        afterData = (float) 45;
+        befoData = (float)  200; // 먹기 전 분유량
+        afterData = (float) 45; // 먹은 후 분유량
         currDate = day;
         currFloat = (float)day.getTime();
         quantity = befoData - afterData;
