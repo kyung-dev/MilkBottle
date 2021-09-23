@@ -16,19 +16,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="섭취량"
-            android:textSize="16sp"
-            android:textColor="#000"/>
+            android:textColor="#000"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
-            android:text="날짜"
-            android:textSize="12sp"
+            android:maxLines="1"
             android:textColor="#444"
-            android:maxLines="1"/>
+            android:textSize="12sp" />
 
     </LinearLayout>
 

@@ -94,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/white"
-                android:text="2021.07.13"
                 android:textColor="@color/black"
                 android:textSize="12dp" />
 

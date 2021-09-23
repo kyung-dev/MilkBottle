@@ -257,44 +257,49 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat secFormat = new SimpleDateFormat("ss");
 
         viewModel.latedata().observe(this, late->{
-            Calendar cal = Calendar.getInstance();
-            Calendar predict = Calendar.getInstance(); // 다음 분유 알림 시간
 
-            Date day1 = cal.getTime(); //현재 시간
-            Date day2 = late.get(0).getCurrDate(); //최근 분유 섭취시간
-            Date day3 = late.get(1).getCurrDate(); //최근 직전 분유 섭취시간
-            Date lateQuanSet = null;
-            Date alarmSet = null;
-            long date1=0;
-            long date2=0;
-            long date3=0;
-            lateMilk=day2.getTime();
+            if(late.size()>0) {
+                Calendar cal = Calendar.getInstance();
+                Calendar predict = Calendar.getInstance(); // 다음 분유 알림 시간
 
-            date1 = day1.getTime();
-            date2 = day2.getTime();
-            date3 = day3.getTime();
-            lateQuanSet = new Date(date1-date2);
-            alarmSet = new Date(date3-date2);
+                Date day1 = cal.getTime(); //현재 시간
+                Date day2 = late.get(0).getCurrDate(); //최근 분유 섭취시간
+                Date day3 = late.get(1).getCurrDate(); //최근 직전 분유 섭취시간
+                Date lateQuanSet = null;
+                Date alarmSet = null;
+                long date1 = 0;
+                long date2 = 0;
+                long date3 = 0;
+                lateMilk = day2.getTime();
 
-            predict.setTime(alarmSet);
-            predict.add(Calendar.DATE,Integer.parseInt(dayFormat.format(cal.getTime())));
-            predict.add(Calendar.HOUR,Integer.parseInt(hourFormat.format(cal.getTime())));
-            predict.add(Calendar.MINUTE,Integer.parseInt(minFormat.format(cal.getTime())));
-            predict.add(Calendar.SECOND,Integer.parseInt(secFormat.format(cal.getTime())));
+                date1 = day1.getTime();
+                date2 = day2.getTime();
+                date3 = day3.getTime();
+                lateQuanSet = new Date(date1 - date2);
+                alarmSet = new Date(date3 - date2);
 
-            cal.setTime(lateQuanSet);
+                predict.setTime(alarmSet);
+                predict.add(Calendar.DATE, Integer.parseInt(dayFormat.format(cal.getTime())));
+                predict.add(Calendar.HOUR, Integer.parseInt(hourFormat.format(cal.getTime())));
+                predict.add(Calendar.MINUTE, Integer.parseInt(minFormat.format(cal.getTime())));
+                predict.add(Calendar.SECOND, Integer.parseInt(secFormat.format(cal.getTime())));
+
+                cal.setTime(lateQuanSet);
 //            cal.add(Calendar.DATE,1);
-            cal.add(Calendar.HOUR,-9);
+                cal.add(Calendar.HOUR, -9);
 
-            //알림 시간 세팅
-            setAlarm(predict);
+                //알림 시간 세팅
+                setAlarm(predict);
 
-            //최근분유시간 세팅
-            if(day2.getDay()==day1.getDay())
-                lateQuan.setText(dateFormat2.format(cal.getTime())+"전 "+Float.toString(late.get(0).getQuantity())+"cc");
-            else
-                lateQuan.setText(dateFormat.format(cal.getTime())+"전 "+Float.toString(late.get(0).getQuantity())+"cc");
-        });
+                //최근분유시간 세팅
+                if (day2.getDay() == day1.getDay())
+                    lateQuan.setText(dateFormat2.format(cal.getTime()) + "전 " + Float.toString(late.get(0).getQuantity()) + "cc");
+                else
+                    lateQuan.setText(dateFormat.format(cal.getTime()) + "전 " + Float.toString(late.get(0).getQuantity()) + "cc");
+
+            }
+            });
+
     }
 
     public void setAlarm(Calendar predictTime){
