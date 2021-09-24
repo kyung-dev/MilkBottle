@@ -108,7 +108,7 @@ public class StatsActivity extends AppCompatActivity {
             period.setText(sdf.format(currDate[0]));
             viewModel.quantityAVG(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, avg -> {
                 if(avg!=null) {
-                    avgVal.setText(String.format("%.1f",avg) + "cc ");
+                    avgVal.setText(String.format("%.1f",avg)+"cc ");
                 }
                 else
                     avgVal.setText("0cc");
@@ -116,11 +116,12 @@ public class StatsActivity extends AppCompatActivity {
 
             viewModel.quantitySUM(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, sum ->{
                 if(sum!=null) {
-                    avgVal.append("( "+String.format("%.1f",sum)+"cc/");
-
+                    avgVal.append("(");
+                    avgVal.append(String.format("%.1f",sum));
+                    avgVal.append("cc/");
                 }
                 else
-                    avgVal.append("(0/");
+                    avgVal.append("(0cc/");
             });
             viewModel.quantityCOUNT(dayToday(currDate[0]).get(0),dayToday(currDate[0]).get(1)).observe(this, count->{
                 int quantity=0;
@@ -145,9 +146,11 @@ public class StatsActivity extends AppCompatActivity {
 
             viewModel.quantitySUM(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, sum ->{
                 if(sum!=null) {
-                    avgVal.append("( "+String.format("%.1f",sum)+"cc/");
+                    avgVal.append("(");
+                    avgVal.append(String.format("%.1f",sum));
+                    avgVal.append("cc/");
                 }else
-                    avgVal.append("(0/");
+                    avgVal.append("(0cc/");
             });
             viewModel.quantityCOUNT(dayToWeekly(currDate[0]).get(0),dayToWeekly(currDate[0]).get(1)).observe(this, count->{
                 int quantity=0;
@@ -172,9 +175,11 @@ public class StatsActivity extends AppCompatActivity {
 
             viewModel.quantitySUM(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, sum ->{
                 if(sum!=null) {
-                    avgVal.append("( "+String.format("%.1f",sum)+"cc/");
+                    avgVal.append("(");
+                    avgVal.append(String.format("%.1f",sum));
+                    avgVal.append("cc/");
                 }else
-                    avgVal.append("(0/");
+                    avgVal.append("(0cc/");
             });
             viewModel.quantityCOUNT(dayToMonthly(currDate[0]).get(0),dayToMonthly(currDate[0]).get(1)).observe(this, count->{
                 int quantity=0;
@@ -363,14 +368,12 @@ public class StatsActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
-        cal.set(Calendar.MONTH,0);
         cal.set(Calendar.DATE,1);
         cal.set( Calendar.HOUR_OF_DAY, 0 );
         cal.set( Calendar.MINUTE, 0 );
         cal.set( Calendar.SECOND, 1 );
         monthly.add(0,cal.getTime());
 
-        cal.set(Calendar.MONTH,11);
         cal.set(Calendar.DATE,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         cal.set( Calendar.HOUR_OF_DAY, 23 );
         cal.set( Calendar.MINUTE, 59 );
